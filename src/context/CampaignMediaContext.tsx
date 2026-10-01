@@ -1,5 +1,6 @@
 import React, { createContext, useContext, useEffect, useState } from 'react';
 import { CAMPAIGN_IMAGES } from '../data/campaignData';
+import campaignMediaConfig from '../data/campaignMediaConfig.json';
 
 export type ImageSlot = 'candidate' | 'interview' | 'heroRally' | 'grassroots' | 'merchandise' | 'civicBg';
 
@@ -9,6 +10,7 @@ export interface ImageSlotMeta {
   description: string;
   recommendedAspect: string;
   defaultSrc: string;
+  recommendedFileName: string;
 }
 
 export const IMAGE_SLOTS_CONFIG: Record<ImageSlot, ImageSlotMeta> = {
@@ -17,42 +19,48 @@ export const IMAGE_SLOTS_CONFIG: Record<ImageSlot, ImageSlotMeta> = {
     label: 'Candidate Spotlight (Seyi Tinubu)',
     description: 'The official portrait of Seyi Tinubu featured prominently on the Home spotlight and About Us leadership sections.',
     recommendedAspect: '4:3 or Portrait 3:4 / 1:1',
-    defaultSrc: CAMPAIGN_IMAGES.candidate,
+    defaultSrc: campaignMediaConfig.candidate || CAMPAIGN_IMAGES.candidate,
+    recommendedFileName: 'candidate.png',
   },
   interview: {
     key: 'interview',
     label: 'Candid Interview ("Why So Serious?")',
     description: 'Seyi Tinubu in conversational dialogue wearing his "Why So Serious?" cap, sharing the grassroots youth vision.',
     recommendedAspect: '16:9 or 4:3 Landscape',
-    defaultSrc: CAMPAIGN_IMAGES.candidate,
+    defaultSrc: campaignMediaConfig.interview || campaignMediaConfig.candidate || CAMPAIGN_IMAGES.candidate,
+    recommendedFileName: 'interview.jpg',
   },
   heroRally: {
     key: 'heroRally',
     label: 'Youth Mobilization Hero Rally',
     description: 'The energetic youth rally banner showcased in the hero section on the campaign homepage.',
     recommendedAspect: '16:9 Landscape',
-    defaultSrc: CAMPAIGN_IMAGES.heroRally,
+    defaultSrc: campaignMediaConfig.heroRally || CAMPAIGN_IMAGES.heroRally,
+    recommendedFileName: 'hero-rally.jpg',
   },
   grassroots: {
     key: 'grassroots',
     label: 'Grassroots Fieldwork & Canvassing',
     description: 'Field volunteers and grassroots mobilization image in the Polling Unit engagement showcase.',
     recommendedAspect: '4:3 or 16:9',
-    defaultSrc: CAMPAIGN_IMAGES.grassroots,
+    defaultSrc: campaignMediaConfig.grassroots || CAMPAIGN_IMAGES.grassroots,
+    recommendedFileName: 'grassroots.jpg',
   },
   merchandise: {
     key: 'merchandise',
     label: 'Official Campaign Store Merchandise',
     description: 'Apparel, caps, and campaign collateral banner displayed in the official movement store.',
     recommendedAspect: '16:9 or 4:3',
-    defaultSrc: CAMPAIGN_IMAGES.merchandise,
+    defaultSrc: campaignMediaConfig.merchandise || CAMPAIGN_IMAGES.merchandise,
+    recommendedFileName: 'merchandise.jpg',
   },
   civicBg: {
     key: 'civicBg',
     label: 'Civic Ambient Background Pattern',
     description: 'The subtle textured atmospheric background pattern layered behind the entire application.',
     recommendedAspect: 'Full HD Wallpaper / Pattern',
-    defaultSrc: CAMPAIGN_IMAGES.civicBg,
+    defaultSrc: campaignMediaConfig.civicBg || CAMPAIGN_IMAGES.civicBg,
+    recommendedFileName: 'civic-bg.jpg',
   },
 };
 
@@ -60,6 +68,7 @@ const STORAGE_KEY = 'stymm_custom_images';
 
 interface CampaignMediaContextType {
   images: Record<ImageSlot, string>;
+  customImages: Partial<Record<ImageSlot, string>>;
   isCustom: (slot: ImageSlot) => boolean;
   uploadImage: (slot: ImageSlot, file: File) => Promise<string>;
   setImageDataUrl: (slot: ImageSlot, dataUrl: string) => void;
@@ -71,6 +80,8 @@ interface CampaignMediaContextType {
   openMediaManagerForSlot: (slot?: ImageSlot) => void;
   lastUpdatedNotice: string | null;
   dismissNotice: () => void;
+  exportGitConfigJson: () => string;
+  downloadGitConfigFile: () => void;
 }
 
 const CampaignMediaContext = createContext<CampaignMediaContextType | undefined>(undefined);
@@ -103,18 +114,18 @@ export const CampaignMediaProvider: React.FC<{ children: React.ReactNode }> = ({
     }
   }, [customImages]);
 
-  // Compute effective images
+  // Compute effective images: LocalStorage -> Git Config -> Factory bundled defaults
   const images: Record<ImageSlot, string> = {
-    candidate: customImages.candidate || CAMPAIGN_IMAGES.candidate,
-    interview: customImages.interview || customImages.candidate || CAMPAIGN_IMAGES.candidate,
-    heroRally: customImages.heroRally || CAMPAIGN_IMAGES.heroRally,
-    grassroots: customImages.grassroots || CAMPAIGN_IMAGES.grassroots,
-    merchandise: customImages.merchandise || CAMPAIGN_IMAGES.merchandise,
-    civicBg: customImages.civicBg || CAMPAIGN_IMAGES.civicBg,
+    candidate: customImages.candidate || campaignMediaConfig.candidate || CAMPAIGN_IMAGES.candidate,
+    interview: customImages.interview || customImages.candidate || campaignMediaConfig.interview || campaignMediaConfig.candidate || CAMPAIGN_IMAGES.candidate,
+    heroRally: customImages.heroRally || campaignMediaConfig.heroRally || CAMPAIGN_IMAGES.heroRally,
+    grassroots: customImages.grassroots || campaignMediaConfig.grassroots || CAMPAIGN_IMAGES.grassroots,
+    merchandise: customImages.merchandise || campaignMediaConfig.merchandise || CAMPAIGN_IMAGES.merchandise,
+    civicBg: customImages.civicBg || campaignMediaConfig.civicBg || CAMPAIGN_IMAGES.civicBg,
   };
 
   const isCustom = (slot: ImageSlot): boolean => {
-    return Boolean(customImages[slot]);
+    return Boolean(customImages[slot] || campaignMediaConfig[slot]);
   };
 
   const uploadImage = (slot: ImageSlot, file: File): Promise<string> => {
@@ -191,10 +202,37 @@ export const CampaignMediaProvider: React.FC<{ children: React.ReactNode }> = ({
     setLastUpdatedNotice(null);
   };
 
+  const exportGitConfigJson = (): string => {
+    const configToExport: Record<string, string> = {
+      candidate: customImages.candidate || campaignMediaConfig.candidate || '',
+      interview: customImages.interview || campaignMediaConfig.interview || '',
+      heroRally: customImages.heroRally || campaignMediaConfig.heroRally || '',
+      grassroots: customImages.grassroots || campaignMediaConfig.grassroots || '',
+      merchandise: customImages.merchandise || campaignMediaConfig.merchandise || '',
+      civicBg: customImages.civicBg || campaignMediaConfig.civicBg || '',
+    };
+    return JSON.stringify(configToExport, null, 2);
+  };
+
+  const downloadGitConfigFile = () => {
+    const jsonStr = exportGitConfigJson();
+    const blob = new Blob([jsonStr], { type: 'application/json' });
+    const url = URL.createObjectURL(blob);
+    const link = document.createElement('a');
+    link.href = url;
+    link.download = 'campaignMediaConfig.json';
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
+    URL.revokeObjectURL(url);
+    setLastUpdatedNotice('📥 Downloaded campaignMediaConfig.json! Place this file into src/data/ and commit to Git.');
+  };
+
   return (
     <CampaignMediaContext.Provider
       value={{
         images,
+        customImages,
         isCustom,
         uploadImage,
         setImageDataUrl,
@@ -206,6 +244,8 @@ export const CampaignMediaProvider: React.FC<{ children: React.ReactNode }> = ({
         openMediaManagerForSlot,
         lastUpdatedNotice,
         dismissNotice,
+        exportGitConfigJson,
+        downloadGitConfigFile,
       }}
     >
       {children}

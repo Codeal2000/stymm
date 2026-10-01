@@ -13,7 +13,10 @@ import {
   Sparkles,
   AlertCircle,
   Eye,
-  Trash2
+  Trash2,
+  Copy,
+  GitBranch,
+  Check
 } from 'lucide-react';
 
 export const DeveloperMediaManager: React.FC = () => {
@@ -24,7 +27,9 @@ export const DeveloperMediaManager: React.FC = () => {
     uploadImage, 
     setImageDataUrl,
     resetSlot, 
-    resetAllSlots 
+    resetAllSlots,
+    exportGitConfigJson,
+    downloadGitConfigFile
   } = useCampaignMedia();
 
   const [activeSlot, setActiveSlot] = useState<ImageSlot>('candidate');
@@ -32,6 +37,7 @@ export const DeveloperMediaManager: React.FC = () => {
   const [dragOverSlot, setDragOverSlot] = useState<ImageSlot | null>(null);
   const [feedback, setFeedback] = useState<{ type: 'success' | 'error'; message: string } | null>(null);
   const [previewModalImg, setPreviewModalImg] = useState<{ src: string; title: string } | null>(null);
+  const [copiedJson, setCopiedJson] = useState(false);
   const fileInputRef = useRef<HTMLInputElement>(null);
 
   const currentMeta = IMAGE_SLOTS_CONFIG[activeSlot];
@@ -75,15 +81,35 @@ export const DeveloperMediaManager: React.FC = () => {
     });
   };
 
-  const handleExportConfig = () => {
-    const dataStr = 'data:text/json;charset=utf-8,' + encodeURIComponent(JSON.stringify(images, null, 2));
-    const downloadAnchor = document.createElement('a');
-    downloadAnchor.setAttribute('href', dataStr);
-    downloadAnchor.setAttribute('download', 'stymm_media_assets_config.json');
-    document.body.appendChild(downloadAnchor);
-    downloadAnchor.click();
-    downloadAnchor.remove();
-    setFeedback({ type: 'success', message: 'Media assets configuration exported successfully.' });
+  const handleCopyGitJson = async () => {
+    const jsonStr = exportGitConfigJson();
+    try {
+      await navigator.clipboard.writeText(jsonStr);
+      setCopiedJson(true);
+      setTimeout(() => setCopiedJson(false), 2500);
+      setFeedback({
+        type: 'success',
+        message: '📋 Copied config JSON! Paste it into src/data/campaignMediaConfig.json in your GitHub repository.',
+      });
+    } catch (err) {
+      setFeedback({
+        type: 'error',
+        message: 'Could not copy automatically. Click "Download Config for Git" instead.',
+      });
+    }
+  };
+
+  const handleDownloadActiveAsset = () => {
+    const a = document.createElement('a');
+    a.href = currentImage;
+    a.download = currentMeta.recommendedFileName;
+    document.body.appendChild(a);
+    a.click();
+    document.body.removeChild(a);
+    setFeedback({
+      type: 'success',
+      message: `Downloaded ${currentMeta.recommendedFileName}! Place into public/images/ to commit to Git.`,
+    });
   };
 
   return (
@@ -109,21 +135,18 @@ export const DeveloperMediaManager: React.FC = () => {
               Permanent Media & Asset Manager
             </h2>
             <p className={`text-xs max-w-2xl ${theme === 'dark' ? 'text-neutral-400' : 'text-slate-600'}`}>
-              Any photo uploaded or updated here permanently changes the website assets for the candidate, interview sessions, rallies, and store banners without requiring visitors to upload anything.
+              Any photo uploaded here updates your movement site immediately. To ensure your photos persist across GitHub commits and GitHub Pages deployments, use the Git Sync tool below.
             </p>
           </div>
 
           <div className="flex items-center gap-2">
             <button
-              onClick={handleExportConfig}
-              className={`px-3 py-2 rounded-xl border text-xs font-semibold flex items-center gap-1.5 transition-colors ${
-                theme === 'dark'
-                  ? 'border-neutral-700 hover:bg-neutral-800 text-neutral-300'
-                  : 'border-slate-200 hover:bg-slate-100 text-slate-700'
-              }`}
+              onClick={downloadGitConfigFile}
+              className="px-3.5 py-2 rounded-xl bg-emerald-600 hover:bg-emerald-500 text-white text-xs font-bold flex items-center gap-1.5 transition-colors shadow-md"
+              title="Download campaignMediaConfig.json to commit to Git"
             >
               <Download className="w-3.5 h-3.5" />
-              <span>Export Config</span>
+              <span>Download Config for Git</span>
             </button>
             <button
               onClick={() => {
@@ -136,6 +159,47 @@ export const DeveloperMediaManager: React.FC = () => {
             >
               <RotateCcw className="w-3.5 h-3.5" />
               <span>Reset All</span>
+            </button>
+          </div>
+        </div>
+
+        {/* Git Persistence Callout Box */}
+        <div className={`mt-5 p-4 rounded-xl border flex flex-col md:flex-row md:items-center justify-between gap-4 ${
+          theme === 'dark' 
+            ? 'bg-emerald-950/30 border-emerald-500/40 text-neutral-200' 
+            : 'bg-emerald-50 border-emerald-300 text-emerald-950'
+        }`}>
+          <div className="space-y-1">
+            <div className="flex items-center gap-1.5 text-xs font-bold text-emerald-500 dark:text-emerald-400">
+              <GitBranch className="w-4 h-4" />
+              <span>Why photos disappear after git commit & how to fix permanently:</span>
+            </div>
+            <p className="text-xs text-neutral-400 dark:text-neutral-300 max-w-xl">
+              Browsers store live uploads in your local browser storage. When you push to GitHub, git only knows about the files in the repository. Save your photos permanently with either 1-click option:
+            </p>
+          </div>
+
+          <div className="flex items-center gap-2 shrink-0">
+            <button
+              onClick={downloadGitConfigFile}
+              className="px-3 py-1.5 rounded-lg bg-emerald-600 hover:bg-emerald-500 text-white text-xs font-bold flex items-center gap-1.5 shadow-sm transition-all"
+              title="Download campaignMediaConfig.json to place in src/data/"
+            >
+              <Download className="w-3.5 h-3.5" />
+              <span>1. Download Config JSON</span>
+            </button>
+            <button
+              onClick={handleCopyGitJson}
+              className={`px-3 py-1.5 rounded-lg border text-xs font-semibold flex items-center gap-1.5 transition-all ${
+                copiedJson
+                  ? 'bg-emerald-700 text-white border-emerald-600'
+                  : theme === 'dark'
+                  ? 'border-neutral-700 hover:bg-neutral-800 text-neutral-300'
+                  : 'border-slate-300 hover:bg-white text-slate-800 bg-white'
+              }`}
+            >
+              {copiedJson ? <Check className="w-3.5 h-3.5 text-emerald-300" /> : <Copy className="w-3.5 h-3.5" />}
+              <span>{copiedJson ? 'Copied!' : 'Copy JSON'}</span>
             </button>
           </div>
         </div>
@@ -291,6 +355,14 @@ export const DeveloperMediaManager: React.FC = () => {
                 </div>
 
                 <div className="absolute top-3 right-3 flex items-center gap-2">
+                  <button
+                    onClick={handleDownloadActiveAsset}
+                    className="p-2 rounded-xl bg-black/70 hover:bg-black text-white backdrop-blur-md border border-white/20 text-xs flex items-center gap-1 transition-colors"
+                    title={`Download as ${currentMeta.recommendedFileName} for public/images/`}
+                  >
+                    <Download className="w-3.5 h-3.5 text-emerald-400" />
+                    <span className="hidden sm:inline text-[11px] font-bold">Download File</span>
+                  </button>
                   <button
                     onClick={() => setPreviewModalImg({ src: currentImage, title: currentMeta.label })}
                     className="p-2 rounded-xl bg-black/70 hover:bg-black text-white backdrop-blur-md border border-white/20 text-xs flex items-center gap-1 transition-colors"

@@ -1,5 +1,5 @@
-import heroRallyImg from '@/src/assets/images/hero_youth_rally_1790759472314.jpg';
-import candidateImg from '@/src/assets/images/candidate_seyi_tinubu.png';
+import heroRallyImg from '@/src/assets/images/hero_youth_rally.png';
+import candidateImg from '@/src/assets/images/candidate_seyi_tinubu_portrait.jpg';
 import grassrootsImg from '@/src/assets/images/grassroots_fieldwork_1790759495817.jpg';
 import merchandiseImg from '@/src/assets/images/campaign_merchandise_1790759506072.jpg';
 import civicBgImg from '@/src/assets/images/civic_bg_pattern_1790760970317.jpg';
