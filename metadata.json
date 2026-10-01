@@ -1,0 +1,6 @@
+{
+  "name": "STYMM Campaign Portal & Mobilization System",
+  "description": "Official digital mobilization portal, grassroots canvassing engine, member dashboard, and polling unit management platform for STYMM.",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}
