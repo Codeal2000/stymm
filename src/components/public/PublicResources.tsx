@@ -37,7 +37,7 @@ export const PublicResources: React.FC = () => {
   const shareableMessages = [
     {
       title: "WhatsApp Voter Registration Reminder",
-      text: "🇳🇬 Fellow Nigerian Youth! Your PVC is your true voice in our democracy. Don't let others decide your future for you. Check your polling unit and join the STYMM movement today: https://stymm-movement.ng",
+      text: "Fellow Nigerian Youth! Your PVC is your true voice in our democracy. Don't let others decide your future for you. Check your polling unit and join the STYMM movement today: https://stymm-movement.ng",
     },
     {
       title: "Doorstep Neighbor Invitation",

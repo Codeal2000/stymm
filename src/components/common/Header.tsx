@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { PortalSection, PublicNav } from '../../types';
 import { useTheme } from '../../context/ThemeContext';
 import { 
@@ -12,7 +12,7 @@ import {
   Flame,
   Heart,
   Lock,
-  ShieldAlert
+  Flag
 } from 'lucide-react';
 
 interface HeaderProps {
@@ -34,6 +34,17 @@ export const Header: React.FC<HeaderProps> = ({
 }) => {
   const { theme, toggleTheme } = useTheme();
   const [menuOpen, setMenuOpen] = useState(false);
+
+  useEffect(() => {
+    if (menuOpen) {
+      document.body.style.overflow = 'hidden';
+    } else {
+      document.body.style.overflow = '';
+    }
+    return () => {
+      document.body.style.overflow = '';
+    };
+  }, [menuOpen]);
 
   // Core essential links for top bar
   const primaryNavLinks: { id: PublicNav; label: string }[] = [
@@ -87,7 +98,8 @@ export const Header: React.FC<HeaderProps> = ({
           <div className="max-w-7xl mx-auto flex items-center justify-between">
             <div className="flex items-center gap-2">
               <span className="inline-flex items-center gap-1.5 px-2 py-0.5 rounded-full bg-white/20 text-white font-semibold text-[10px] tracking-wide">
-                🇳🇬 OFFICIAL YOUTH CAMPAIGN TRAIN
+                <Flag className="w-3 h-3 text-emerald-300" />
+                <span>OFFICIAL YOUTH CAMPAIGN TRAIN</span>
               </span>
               <span className="hidden lg:inline text-emerald-100 font-medium text-[11px]">
                 Empowering Nigerian Youth Across 36 States, 774 LGAs & 176,846 Polling Units
@@ -252,21 +264,27 @@ export const Header: React.FC<HeaderProps> = ({
 
       {/* Hamburger Navigation Drawer Modal / Backdrop */}
       {menuOpen && (
-        <div className="fixed inset-0 z-50 overflow-hidden animate-fadeIn">
+        <div className="fixed inset-0 z-[100] overflow-hidden">
           {/* Backdrop Blur Overlay */}
           <div 
             onClick={() => setMenuOpen(false)}
-            className="fixed inset-0 bg-black/70 backdrop-blur-sm transition-opacity" 
+            className="fixed inset-0 bg-black/70 backdrop-blur-xs z-[101] transition-opacity animate-fadeIn" 
           />
 
-          {/* Slide-out Drawer Panel */}
-          <div className={`fixed inset-y-0 right-0 max-w-full w-full sm:w-[420px] shadow-2xl flex flex-col z-10 overflow-y-auto border-l transition-transform duration-300 ${
-            theme === 'dark' ? 'bg-neutral-950 border-neutral-800 text-white' : 'bg-white border-emerald-200 text-slate-900'
-          }`}>
-            {/* Drawer Header */}
-            <div className={`p-4 sm:p-5 border-b flex items-center justify-between sticky top-0 backdrop-blur-md z-10 ${
-              theme === 'dark' ? 'bg-neutral-950/90 border-neutral-800' : 'bg-white/90 border-emerald-100'
-            }`}>
+          {/* Slide-out Drawer Panel - 100% Opaque Solid Background */}
+          <div 
+            className={`fixed inset-y-0 right-0 max-w-full w-full sm:w-[420px] shadow-2xl flex flex-col z-[102] overflow-y-auto border-l transition-transform duration-300 animate-fadeIn ${
+              theme === 'dark' ? 'border-neutral-800 text-white' : 'border-emerald-200 text-slate-900'
+            }`}
+            style={{ backgroundColor: theme === 'dark' ? '#0a0a0a' : '#ffffff' }}
+          >
+            {/* Drawer Header - 100% Solid Non-Translucent Top */}
+            <div 
+              className={`p-4 sm:p-5 border-b flex items-center justify-between sticky top-0 z-20 ${
+                theme === 'dark' ? 'border-neutral-800' : 'border-emerald-100'
+              }`}
+              style={{ backgroundColor: theme === 'dark' ? '#0a0a0a' : '#ffffff' }}
+            >
               <div className="flex items-center gap-2.5">
                 <div className="w-8 h-8 rounded-lg bg-emerald-600 text-white flex items-center justify-center font-black text-sm">
                   ST
@@ -389,8 +407,9 @@ export const Header: React.FC<HeaderProps> = ({
                       <div className="text-[10px] text-neutral-400 font-normal">Restricted to verified canvassers</div>
                     </div>
                   </div>
-                  <span className="text-[10px] px-2 py-0.5 rounded-md font-bold uppercase tracking-wider bg-rose-500/10 text-rose-500 border border-rose-500/20">
-                    Restricted 🔒
+                  <span className="inline-flex items-center gap-1 text-[10px] px-2 py-0.5 rounded-md font-bold uppercase tracking-wider bg-rose-500/10 text-rose-500 border border-rose-500/20">
+                    <Lock className="w-2.5 h-2.5" />
+                    <span>Restricted</span>
                   </span>
                 </button>
               </div>

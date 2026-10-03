@@ -89,10 +89,11 @@ export const PublicEvents: React.FC = () => {
                 <span className="px-3 py-1 rounded-full bg-emerald-100 text-emerald-800 dark:bg-emerald-950 dark:text-emerald-300 text-xs font-bold border border-emerald-200 dark:border-emerald-800/80">
                   {item.category}
                 </span>
-                <span className={`text-xs font-mono font-semibold ${
+                <span className={`text-xs font-mono font-semibold flex items-center gap-1 ${
                   theme === 'dark' ? 'text-neutral-400' : 'text-emerald-800'
                 }`}>
-                  📍 {item.state} State
+                  <MapPin className="w-3.5 h-3.5 text-emerald-500" />
+                  <span>{item.state} State</span>
                 </span>
               </div>
 

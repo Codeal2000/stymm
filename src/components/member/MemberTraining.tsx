@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { TRAINING_LESSONS } from '../../data/campaignData';
 import { TrainingLesson } from '../../types';
 import { useTheme } from '../../context/ThemeContext';
-import { BookOpen, CheckCircle2, Award, Clock, ArrowRight, Sparkles, Check } from 'lucide-react';
+import { BookOpen, CheckCircle2, Award, Clock, ArrowRight, Sparkles, Check, XCircle } from 'lucide-react';
 
 export const MemberTraining: React.FC = () => {
   const { theme } = useTheme();
@@ -258,12 +258,22 @@ export const MemberTraining: React.FC = () => {
               </button>
 
               {quizSubmitted && (
-                <div className={`p-3 rounded-xl text-xs font-semibold ${
-                  quizAnswer === 'b' ? 'bg-emerald-100 text-emerald-900 border border-emerald-300' : 'bg-red-100 text-red-900 border border-red-300'
+                <div className={`p-3.5 rounded-xl text-xs font-semibold flex items-start gap-2.5 ${
+                  quizAnswer === 'b' 
+                    ? 'bg-emerald-500/10 text-emerald-600 dark:text-emerald-400 border border-emerald-500/30' 
+                    : 'bg-rose-500/10 text-rose-600 dark:text-rose-400 border border-rose-500/30'
                 }`}>
-                  {quizAnswer === 'b'
-                    ? "✓ Correct! BVAS accredited voter figure is the absolute legal benchmark for valid results."
-                    : "✗ Incorrect. The observer must strictly verify BVAS accredited voter count matches total cast."}
+                  {quizAnswer === 'b' ? (
+                    <>
+                      <CheckCircle2 className="w-4 h-4 text-emerald-500 shrink-0 mt-0.5" />
+                      <div>Correct! BVAS accredited voter figure is the absolute legal benchmark for valid results.</div>
+                    </>
+                  ) : (
+                    <>
+                      <XCircle className="w-4 h-4 text-rose-500 shrink-0 mt-0.5" />
+                      <div>Incorrect. The observer must strictly verify BVAS accredited voter count matches total cast.</div>
+                    </>
+                  )}
                 </div>
               )}
             </form>

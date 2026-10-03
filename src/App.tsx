@@ -146,32 +146,10 @@ export default function App() {
         <div className={`absolute -bottom-20 left-10 w-[420px] h-[420px] rounded-full blur-[130px] transition-all duration-700 animate-float-reverse ${
           theme === 'dark' ? 'bg-emerald-800/25' : 'bg-emerald-200/25'
         }`} />
-
-        {/* Floating Blurred Bokeh Lights */}
-        <div className={`absolute top-1/6 left-1/4 w-32 h-32 rounded-full blur-2xl animate-float-slow ${
-          theme === 'dark' ? 'bg-emerald-400/20' : 'bg-emerald-500/15'
-        }`} />
-        <div className={`absolute top-3/5 right-1/4 w-40 h-40 rounded-full blur-3xl animate-float-reverse ${
-          theme === 'dark' ? 'bg-emerald-500/20' : 'bg-emerald-400/15'
-        }`} />
-        <div className={`absolute top-4/5 left-1/3 w-28 h-28 rounded-full blur-xl animate-pulse-glow ${
-          theme === 'dark' ? 'bg-emerald-300/15' : 'bg-emerald-600/10'
-        }`} />
-
-        {/* Floating Blurred Civic Rings & Badges */}
-        <div className={`absolute top-1/4 right-[12%] w-80 h-80 border-2 rounded-full blur-[3px] transition-opacity duration-700 animate-float-slow ${
-          theme === 'dark' ? 'border-emerald-500/20' : 'border-emerald-500/12'
-        }`} />
-        <div className={`absolute bottom-1/4 left-[8%] w-[420px] h-[420px] border border-dashed rounded-full blur-[2px] transition-opacity duration-700 animate-float-reverse ${
-          theme === 'dark' ? 'border-emerald-400/18' : 'border-emerald-600/12'
-        }`} />
-        <div className={`absolute top-2/3 right-[30%] w-48 h-48 border rounded-3xl rotate-12 blur-[2.5px] transition-opacity duration-700 animate-float-slow ${
-          theme === 'dark' ? 'border-emerald-300/15' : 'border-emerald-500/10'
-        }`} />
       </div>
 
       {/* Universal Top Bar */}
-      <div className="relative z-10">
+      <div className="relative z-50">
         <Header
           portal={portal}
           onSelectPortal={handleSelectPortal}
@@ -183,7 +161,7 @@ export default function App() {
       </div>
 
       {/* Main Dynamic View Area */}
-      <main className="flex-1 relative z-10">
+      <main className="flex-1 relative z-0">
         {portal === 'public' && (
           <>
             {publicNav === 'home' && (

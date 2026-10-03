@@ -151,7 +151,7 @@ export const CampaignMediaProvider: React.FC<{ children: React.ReactNode }> = ({
           }));
           const slotMeta = IMAGE_SLOTS_CONFIG[slot];
           setLastUpdatedNotice(
-            `✨ Success! ${slotMeta.label} updated with your authentic photograph. AI conversion is disabled; original visual fidelity preserved.`
+            `Success: ${slotMeta.label} updated with your authentic photograph. AI conversion is disabled; original visual fidelity preserved.`
           );
           resolve(result);
         } else {
@@ -172,7 +172,7 @@ export const CampaignMediaProvider: React.FC<{ children: React.ReactNode }> = ({
     }));
     const slotMeta = IMAGE_SLOTS_CONFIG[slot];
     setLastUpdatedNotice(
-      `✨ Success! ${slotMeta.label} updated with your uploaded photo. Authentic look preserved without AI conversion.`
+      `Success: ${slotMeta.label} updated with your uploaded photo. Authentic look preserved without AI conversion.`
     );
   };
 
@@ -225,7 +225,7 @@ export const CampaignMediaProvider: React.FC<{ children: React.ReactNode }> = ({
     link.click();
     document.body.removeChild(link);
     URL.revokeObjectURL(url);
-    setLastUpdatedNotice('📥 Downloaded campaignMediaConfig.json! Place this file into src/data/ and commit to Git.');
+    setLastUpdatedNotice('Downloaded campaignMediaConfig.json! Place this file into src/data/ and commit to Git.');
   };
 
   return (

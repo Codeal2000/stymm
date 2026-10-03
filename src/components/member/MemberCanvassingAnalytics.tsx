@@ -596,8 +596,14 @@ export const MemberCanvassingAnalytics: React.FC<MemberCanvassingAnalyticsProps>
                     onMouseLeave={() => setHoveredBarIndex(null)}
                   >
                     <div className="flex items-center justify-between text-xs">
-                      <span className={`font-semibold ${isPeak ? 'text-emerald-500 font-bold' : theme === 'dark' ? 'text-neutral-300' : 'text-slate-700'}`}>
-                        {item.slot} {isPeak && '🔥 Peak Time'}
+                      <span className={`font-semibold flex items-center gap-1.5 ${isPeak ? 'text-emerald-500 font-bold' : theme === 'dark' ? 'text-neutral-300' : 'text-slate-700'}`}>
+                        <span>{item.slot}</span>
+                        {isPeak && (
+                          <span className="inline-flex items-center gap-0.5 text-[10px] px-1.5 py-0.5 rounded-full bg-amber-500/10 text-amber-500 font-bold">
+                            <Flame className="w-2.5 h-2.5" />
+                            <span>Peak Time</span>
+                          </span>
+                        )}
                       </span>
                       <span className="font-mono font-bold text-neutral-400">
                         {item.visits} visits ({item.conversion}% contact)

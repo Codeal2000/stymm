@@ -215,9 +215,10 @@ export const VanguardAuthGate: React.FC<VanguardAuthGateProps> = ({
           <button
             type="button"
             onClick={onApplyForMembership}
-            className="text-xs font-bold text-emerald-600 dark:text-emerald-400 hover:underline"
+            className="text-xs font-bold text-emerald-600 dark:text-emerald-400 hover:underline inline-flex items-center gap-1"
           >
-            Apply for Vanguard Membership & Receive Your ID Pass →
+            <span>Apply for Vanguard Membership & Receive Your ID Pass</span>
+            <ArrowRight className="w-3.5 h-3.5" />
           </button>
         </div>
       </div>
