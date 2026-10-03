@@ -75,13 +75,6 @@ export const PublicAbout: React.FC = () => {
                 referrerPolicy="no-referrer"
                 className="w-full h-full object-cover transition-transform duration-500 hover:scale-105"
               />
-
-              {/* Status Badge */}
-              <div className="absolute top-3 left-3 z-10">
-                <span className="px-2.5 py-0.5 rounded-full text-[10px] font-semibold bg-black/75 backdrop-blur-md text-emerald-400 border border-emerald-500/30">
-                  {activePhotoTab === 'interview' ? 'Candid Interview' : 'Official Portrait'}
-                </span>
-              </div>
             </div>
 
             <div className={`p-6 border-t space-y-3 ${

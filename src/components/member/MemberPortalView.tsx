@@ -7,10 +7,12 @@ import { MemberAdoptPU } from './MemberAdoptPU';
 import { MemberTraining } from './MemberTraining';
 import { MemberHelpDesk } from './MemberHelpDesk';
 import { MemberSurveys } from './MemberSurveys';
+import { MemberCanvassingAnalytics } from './MemberCanvassingAnalytics';
 import { PublicEvents } from '../public/PublicEvents';
 import { PublicStore } from '../public/PublicStore';
 import {
   LayoutDashboard,
+  BarChart3,
   User,
   Users2,
   MapPin,
@@ -58,6 +60,7 @@ export const MemberPortalView: React.FC<MemberPortalViewProps> = ({
 
   const sidebarLinks: { id: MemberNav; label: string; icon: any }[] = [
     { id: 'dashboard', label: 'Dashboard', icon: LayoutDashboard },
+    { id: 'analytics', label: 'Canvassing Analytics', icon: BarChart3 },
     { id: 'profile', label: 'My Profile & ID Pass', icon: User },
     { id: 'network', label: 'My Network & Squad', icon: Users2 },
     { id: 'ward', label: 'My Ward & PU Radar', icon: MapPin },
@@ -84,9 +87,53 @@ export const MemberPortalView: React.FC<MemberPortalViewProps> = ({
         </div>
       )}
 
+      {/* Mobile Fast Navigation Scroller (Phones & Tablets) */}
+      <div className="lg:hidden w-full space-y-2">
+        <div className={`p-3 rounded-2xl border flex items-center justify-between ${
+          theme === 'dark' ? 'bg-neutral-900 border-neutral-800' : 'bg-white border-emerald-100 shadow-sm'
+        }`}>
+          <div>
+            <span className="text-[10px] font-bold text-emerald-600 uppercase tracking-widest block">
+              Member Console
+            </span>
+            <div className={`text-xs font-bold ${theme === 'dark' ? 'text-white' : 'text-slate-900'}`}>
+              Kehinde Balogun · Agent #4429
+            </div>
+          </div>
+          <span className="px-2.5 py-0.5 rounded-full text-[10px] font-bold bg-emerald-500/20 text-emerald-500 border border-emerald-500/30">
+            Field Active
+          </span>
+        </div>
+
+        <div className="overflow-x-auto no-scrollbar pb-1">
+          <div className="flex items-center gap-1.5 min-w-max p-1.5 rounded-2xl bg-neutral-100 dark:bg-neutral-900/90 border border-neutral-200 dark:border-neutral-800">
+            {sidebarLinks.map((item) => {
+              const Icon = item.icon;
+              const isActive = memberNav === item.id;
+              return (
+                <button
+                  key={item.id}
+                  onClick={() => onSelectMemberNav(item.id)}
+                  className={`flex items-center gap-1.5 px-3 py-1.5 text-xs font-bold rounded-xl transition-all whitespace-nowrap active:scale-95 ${
+                    isActive
+                      ? 'bg-emerald-600 text-white shadow-sm'
+                      : theme === 'dark'
+                      ? 'text-neutral-400 hover:text-white hover:bg-neutral-800'
+                      : 'text-neutral-600 hover:text-emerald-950 hover:bg-emerald-50'
+                  }`}
+                >
+                  <Icon className="w-3.5 h-3.5 shrink-0" />
+                  <span>{item.label}</span>
+                </button>
+              );
+            })}
+          </div>
+        </div>
+      </div>
+
       <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-start">
-        {/* Left Sidebar Menu */}
-        <div className={`lg:col-span-3 border rounded-2xl p-4 space-y-4 sticky top-24 transition-all shadow-sm ${
+        {/* Left Sidebar Menu (Desktop Only) */}
+        <div className={`hidden lg:block lg:col-span-3 border rounded-2xl p-4 space-y-4 sticky top-24 transition-all shadow-sm ${
           theme === 'dark' ? 'bg-neutral-900/70 border-neutral-800' : 'bg-white border-emerald-100 shadow-sm'
         }`}>
           <div className={`px-3 py-2 border-b ${theme === 'dark' ? 'border-neutral-800' : 'border-emerald-100'}`}>
@@ -131,6 +178,14 @@ export const MemberPortalView: React.FC<MemberPortalViewProps> = ({
             <MemberDashboard
               onSelectMemberNav={onSelectMemberNav}
               canvassCount={canvassRecords.length}
+            />
+          )}
+
+          {memberNav === 'analytics' && (
+            <MemberCanvassingAnalytics
+              canvassCount={canvassRecords.length}
+              canvassRecords={canvassRecords}
+              onLogNewCanvass={() => onSelectMemberNav('canvassing')}
             />
           )}
 

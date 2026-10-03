@@ -16,6 +16,7 @@ export type PublicNav =
 
 export type MemberNav = 
   | 'dashboard'
+  | 'analytics'
   | 'profile'
   | 'network'
   | 'ward'

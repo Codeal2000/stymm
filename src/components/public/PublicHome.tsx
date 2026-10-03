@@ -26,13 +26,6 @@ export const PublicHome: React.FC<PublicHomeProps> = ({ onSelectNav, onSelectPor
           <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 items-center">
             {/* Left Column: Vision & Primary CTA */}
             <div className="lg:col-span-7 space-y-6">
-              <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full text-xs font-bold tracking-wider uppercase border shadow-sm transition-colors duration-200">
-                <span className="w-2 h-2 rounded-full bg-emerald-500 animate-pulse" />
-                <span className={theme === 'dark' ? 'text-emerald-400' : 'text-emerald-800'}>
-                  Decentralized Youth Mobilization · 176,846 Polling Units
-                </span>
-              </div>
-
               <h1 className={`text-4xl sm:text-5xl lg:text-6xl font-extrabold tracking-tight leading-tight font-display text-balance ${
                 theme === 'dark' ? 'text-white' : 'text-emerald-950'
               }`}>
@@ -47,10 +40,10 @@ export const PublicHome: React.FC<PublicHomeProps> = ({ onSelectNav, onSelectPor
               </p>
 
               {/* Action Buttons */}
-              <div className="flex flex-wrap items-center gap-4 pt-2">
+              <div className="flex flex-col sm:flex-row sm:items-center gap-3 sm:gap-4 pt-2 w-full">
                 <button
                   onClick={() => onSelectNav('join')}
-                  className="px-6 py-3.5 text-sm font-bold text-white bg-emerald-600 hover:bg-emerald-700 active:bg-emerald-800 rounded-xl shadow-lg hover:shadow-emerald-600/30 transition-all flex items-center gap-2"
+                  className="w-full sm:w-auto px-6 py-3.5 text-xs sm:text-sm font-bold text-white bg-emerald-600 hover:bg-emerald-700 active:bg-emerald-800 rounded-xl shadow-lg hover:shadow-emerald-600/30 transition-all flex items-center justify-center gap-2"
                 >
                   <span>Join The Movement Today</span>
                   <ArrowRight className="w-4 h-4" />
@@ -58,7 +51,7 @@ export const PublicHome: React.FC<PublicHomeProps> = ({ onSelectNav, onSelectPor
 
                 <button
                   onClick={() => onSelectPortal('member')}
-                  className={`px-6 py-3.5 text-sm font-semibold rounded-xl border transition-colors flex items-center gap-2 ${
+                  className={`w-full sm:w-auto px-6 py-3.5 text-xs sm:text-sm font-semibold rounded-xl border transition-colors flex items-center justify-center gap-2 ${
                     theme === 'dark'
                       ? 'bg-neutral-900 hover:bg-neutral-800 text-white border-neutral-700'
                       : 'bg-white hover:bg-emerald-50 text-emerald-950 border-emerald-200 shadow-sm'
@@ -69,36 +62,36 @@ export const PublicHome: React.FC<PublicHomeProps> = ({ onSelectNav, onSelectPor
               </div>
 
               {/* Quick Metrics Adjacency */}
-              <div className={`pt-6 border-t grid grid-cols-3 gap-6 ${
+              <div className={`pt-6 border-t grid grid-cols-3 gap-2 sm:gap-6 ${
                 theme === 'dark' ? 'border-neutral-800 text-neutral-300' : 'border-emerald-100 text-slate-700'
               }`}>
                 <div>
-                  <div className={`text-2xl sm:text-3xl font-extrabold font-mono tabular-nums ${
+                  <div className={`text-xl sm:text-2xl lg:text-3xl font-extrabold font-mono tabular-nums ${
                     theme === 'dark' ? 'text-white' : 'text-emerald-950'
                   }`}>
                     1.42M+
                   </div>
-                  <div className={`text-xs mt-1 ${theme === 'dark' ? 'text-neutral-400' : 'text-slate-600 font-medium'}`}>
+                  <div className={`text-[10px] sm:text-xs mt-1 ${theme === 'dark' ? 'text-neutral-400' : 'text-slate-600 font-medium'}`}>
                     Verified Youth Members
                   </div>
                 </div>
                 <div>
-                  <div className={`text-2xl sm:text-3xl font-extrabold font-mono tabular-nums ${
+                  <div className={`text-xl sm:text-2xl lg:text-3xl font-extrabold font-mono tabular-nums ${
                     theme === 'dark' ? 'text-white' : 'text-emerald-950'
                   }`}>
                     124,500+
                   </div>
-                  <div className={`text-xs mt-1 ${theme === 'dark' ? 'text-neutral-400' : 'text-slate-600 font-medium'}`}>
+                  <div className={`text-[10px] sm:text-xs mt-1 ${theme === 'dark' ? 'text-neutral-400' : 'text-slate-600 font-medium'}`}>
                     Active Ward Canvassers
                   </div>
                 </div>
                 <div>
-                  <div className={`text-2xl sm:text-3xl font-extrabold font-mono tabular-nums ${
+                  <div className={`text-xl sm:text-2xl lg:text-3xl font-extrabold font-mono tabular-nums ${
                     theme === 'dark' ? 'text-white' : 'text-emerald-950'
                   }`}>
                     94,200
                   </div>
-                  <div className={`text-xs mt-1 ${theme === 'dark' ? 'text-neutral-400' : 'text-slate-600 font-medium'}`}>
+                  <div className={`text-[10px] sm:text-xs mt-1 ${theme === 'dark' ? 'text-neutral-400' : 'text-slate-600 font-medium'}`}>
                     Polling Units Adopted
                   </div>
                 </div>
@@ -153,13 +146,6 @@ export const PublicHome: React.FC<PublicHomeProps> = ({ onSelectNav, onSelectPor
                   referrerPolicy="no-referrer"
                   className="w-full h-full object-cover"
                 />
-
-                {/* Presidential Movement Badge */}
-                <div className="absolute top-3 left-3 z-10">
-                  <span className="px-2.5 py-1 rounded-full text-[10px] font-bold bg-black/75 backdrop-blur-md text-emerald-400 border border-emerald-500/30 shadow-md">
-                    National Convener
-                  </span>
-                </div>
               </div>
             </div>
 
@@ -305,20 +291,6 @@ export const PublicHome: React.FC<PublicHomeProps> = ({ onSelectNav, onSelectPor
                   referrerPolicy="no-referrer"
                   className="w-full h-full object-cover transition-transform duration-700 hover:scale-105"
                 />
-
-                {/* Badge */}
-                <div className="absolute top-3 left-3 z-10">
-                  <span className="px-3 py-1 rounded-full text-[11px] font-bold bg-black/80 backdrop-blur-md text-white border border-white/20 shadow-lg flex items-center gap-1.5">
-                    <Sparkles className="w-3.5 h-3.5 text-amber-400" />
-                    Candid Interview Photo
-                  </span>
-                </div>
-              </div>
-
-              {/* Photo Attribution Caption */}
-              <div className="mt-3 flex items-center justify-between w-full max-w-md px-1 text-[11px] text-neutral-400">
-                <span>Seyi Tinubu in Dialogue with Youth Volunteers</span>
-                <span className="font-mono text-[10px] text-emerald-500">STYMM Vanguard 2026</span>
               </div>
             </div>
           </div>

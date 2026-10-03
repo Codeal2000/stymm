@@ -1,8 +1,9 @@
 import React from 'react';
 import { MemberNav } from '../../types';
 import { useTheme } from '../../context/ThemeContext';
-import { Users, Target, Award, ShieldCheck, Plus, Sparkles, MessageSquare, ArrowRight } from 'lucide-react';
+import { Users, Target, Award, ShieldCheck, Plus, Sparkles, MessageSquare, ArrowRight, BarChart3 } from 'lucide-react';
 import { INITIAL_CANVASS_RECORDS } from '../../data/campaignData';
+import { MemberCanvassingAnalytics } from './MemberCanvassingAnalytics';
 
 interface MemberDashboardProps {
   onSelectMemberNav: (nav: MemberNav) => void;
@@ -124,6 +125,12 @@ export const MemberDashboard: React.FC<MemberDashboardProps> = ({ onSelectMember
           </div>
         </div>
       </div>
+
+      {/* Member Personal Canvassing Analytics (Recharts Data Visualization) */}
+      <MemberCanvassingAnalytics
+        canvassCount={canvassCount}
+        onLogNewCanvass={() => onSelectMemberNav('canvassing')}
+      />
 
       {/* Middle Row: Recent Canvassing Log & Fast Operations */}
       <div className="grid grid-cols-1 lg:grid-cols-12 gap-8">
