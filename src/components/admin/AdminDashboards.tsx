@@ -2,7 +2,6 @@ import React, { useState } from 'react';
 import { STATES_AND_LGAS } from '../../data/campaignData';
 import { useTheme } from '../../context/ThemeContext';
 import { AdminRole } from '../../types';
-import { DeveloperMediaManager } from './DeveloperMediaManager';
 import {
   ShieldCheck,
   Users,
@@ -12,19 +11,14 @@ import {
   AlertCircle,
   Plus,
   CheckCircle2,
-  Image as ImageIcon,
-  ArrowLeft,
-  Wrench
+  ArrowLeft
 } from 'lucide-react';
-
 export const AdminDashboards: React.FC<{ initialRole?: AdminRole | string; onBackToPublic?: () => void }> = ({ 
   initialRole, 
   onBackToPublic 
 }) => {
   const { theme } = useTheme();
-  const [activeTab, setActiveTab] = useState<'overview' | 'incidents' | 'media'>(
-    initialRole === 'developer' ? 'media' : 'overview'
-  );
+  const [activeTab, setActiveTab] = useState<'overview' | 'incidents'>('overview');
   const [incidents, setIncidents] = useState([
     {
       id: 1,
@@ -91,31 +85,27 @@ export const AdminDashboards: React.FC<{ initialRole?: AdminRole | string; onBac
               </button>
             )}
             <span className="text-xs font-bold text-emerald-600 uppercase tracking-widest">
-              {initialRole === 'developer' ? 'Developer Command Console' : 'Campaign Administration'}
+              Campaign Administration Command
             </span>
           </div>
           <h1 className={`text-2xl sm:text-3xl font-extrabold font-display transition-colors ${
             theme === 'dark' ? 'text-white' : 'text-neutral-900'
           }`}>
-            {activeTab === 'media' ? 'Developer Media & Photo Manager' : 'National Mobilization Dashboard'}
+            National Mobilization Dashboard
           </h1>
           <p className={`text-xs ${theme === 'dark' ? 'text-slate-400' : 'text-slate-500'}`}>
-            {activeTab === 'media' 
-              ? 'Permanently update website photos and assets with zero AI alteration.'
-              : 'Overview of grassroots coverage, state voter targets, and field coordination.'}
+            Overview of grassroots coverage, state voter targets, and field coordination.
           </p>
         </div>
 
         <div className="flex items-center gap-2 self-start sm:self-auto">
-          {activeTab !== 'media' && (
-            <button
-              onClick={handleExport}
-              className="px-4 py-2.5 bg-emerald-600 hover:bg-emerald-500 text-white font-bold rounded-xl text-xs transition-all shadow-md flex items-center gap-2 hover:scale-[1.02] active:scale-[0.98]"
-            >
-              <Download className="w-4 h-4" />
-              <span>{exported ? 'Report Downloaded!' : 'Export Summary (CSV)'}</span>
-            </button>
-          )}
+          <button
+            onClick={handleExport}
+            className="px-4 py-2.5 bg-emerald-600 hover:bg-emerald-500 text-white font-bold rounded-xl text-xs transition-all shadow-md flex items-center gap-2 hover:scale-[1.02] active:scale-[0.98]"
+          >
+            <Download className="w-4 h-4" />
+            <span>{exported ? 'Report Downloaded!' : 'Export Summary (CSV)'}</span>
+          </button>
 
           {onBackToPublic && (
             <button
@@ -133,26 +123,10 @@ export const AdminDashboards: React.FC<{ initialRole?: AdminRole | string; onBac
       </div>
 
       {/* Admin / Developer Tab Switcher */}
+      {/* Tab Switcher: Overview vs Incidents */}
       <div className={`p-1.5 rounded-2xl border flex flex-wrap gap-2 ${
         theme === 'dark' ? 'bg-neutral-900/90 border-neutral-800' : 'bg-slate-100/80 border-slate-200'
       }`}>
-        <button
-          onClick={() => setActiveTab('media')}
-          className={`px-4 py-2 rounded-xl text-xs font-bold transition-all flex items-center gap-2 ${
-            activeTab === 'media'
-              ? 'bg-emerald-600 text-white shadow-md'
-              : theme === 'dark'
-              ? 'text-neutral-400 hover:text-white hover:bg-neutral-800'
-              : 'text-slate-600 hover:text-slate-900 hover:bg-white'
-          }`}
-        >
-          <Wrench className="w-3.5 h-3.5" />
-          <span>🛠️ Permanent Media & Photos</span>
-          {initialRole === 'developer' && (
-            <span className="px-1.5 py-0.2 rounded-md bg-white/20 text-[10px]">Dev</span>
-          )}
-        </button>
-
         <button
           onClick={() => setActiveTab('overview')}
           className={`px-4 py-2 rounded-xl text-xs font-bold transition-all flex items-center gap-2 ${
@@ -181,15 +155,6 @@ export const AdminDashboards: React.FC<{ initialRole?: AdminRole | string; onBac
           <span>Incident & Field Dispatches</span>
         </button>
       </div>
-
-      {/* Tab Content: Developer Media Asset Manager */}
-      {activeTab === 'media' && (
-        <DeveloperMediaManager />
-      )}
-
-      {/* Tab Content: Standard Admin Overview & Incidents */}
-      {activeTab !== 'media' && (
-        <>
 
       {/* 4 Basic KPI Cards with card-focus-group */}
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 card-focus-group">
@@ -432,8 +397,6 @@ export const AdminDashboards: React.FC<{ initialRole?: AdminRole | string; onBac
             </form>
           </div>
         </div>
-      )}
-      </>
       )}
     </div>
   );

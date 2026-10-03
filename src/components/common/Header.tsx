@@ -1,7 +1,6 @@
 import React, { useState } from 'react';
 import { PortalSection, PublicNav } from '../../types';
 import { useTheme } from '../../context/ThemeContext';
-import { useCampaignMedia } from '../../context/CampaignMediaContext';
 import { 
   ChevronDown, 
   Menu, 
@@ -9,15 +8,11 @@ import {
   Sun, 
   Moon, 
   ShoppingBag,
-  ShieldCheck, 
-  UserCheck,
-  Image as ImageIcon,
-  Compass,
   ArrowRight,
-  PhoneCall,
   Flame,
-  Layers,
-  Heart
+  Heart,
+  Lock,
+  ShieldAlert
 } from 'lucide-react';
 
 interface HeaderProps {
@@ -38,7 +33,6 @@ export const Header: React.FC<HeaderProps> = ({
   onOpenCart,
 }) => {
   const { theme, toggleTheme } = useTheme();
-  const { setIsMediaManagerOpen } = useCampaignMedia();
   const [menuOpen, setMenuOpen] = useState(false);
 
   // Core essential links for top bar
@@ -73,6 +67,12 @@ export const Header: React.FC<HeaderProps> = ({
   const handlePortalClick = (targetPortal: PortalSection) => {
     onSelectPortal(targetPortal);
     setMenuOpen(false);
+  };
+
+  const handleThemeToggleClick = (e: React.MouseEvent) => {
+    e.preventDefault();
+    e.stopPropagation();
+    toggleTheme();
   };
 
   return (
@@ -177,11 +177,12 @@ export const Header: React.FC<HeaderProps> = ({
             </button>
           </nav>
 
-          {/* Right Action Controls: Theme Toggle + Member Portal + Join CTA + Hamburger */}
+          {/* Right Action Controls: Theme Toggle + Cart + Join CTA + Hamburger */}
           <div className="flex items-center gap-2 sm:gap-2.5 shrink-0">
-            {/* Theme Toggle Button */}
+            {/* Theme Toggle Button - Strictly Isolated to Light/Dark Mode */}
             <button
-              onClick={toggleTheme}
+              type="button"
+              onClick={handleThemeToggleClick}
               aria-label="Toggle dark and light mode"
               className={`p-2 rounded-xl transition-all border shrink-0 ${
                 theme === 'dark'
@@ -191,9 +192,9 @@ export const Header: React.FC<HeaderProps> = ({
               title={theme === 'dark' ? 'Switch to Light Theme' : 'Switch to Dark Theme'}
             >
               {theme === 'dark' ? (
-                <Sun className="w-4 h-4" />
+                <Sun className="w-4 h-4 pointer-events-none" />
               ) : (
-                <Moon className="w-4 h-4" />
+                <Moon className="w-4 h-4 pointer-events-none" />
               )}
             </button>
 
@@ -212,28 +213,6 @@ export const Header: React.FC<HeaderProps> = ({
               </button>
             )}
 
-            {/* Member Portal Button */}
-            <button
-              onClick={() => {
-                if (portal === 'member') {
-                  onSelectPortal('public');
-                  onSelectPublicNav('home');
-                } else {
-                  onSelectPortal('member');
-                }
-              }}
-              className={`hidden md:inline-flex items-center gap-1.5 px-3 py-1.5 text-xs font-bold rounded-xl border transition-all whitespace-nowrap ${
-                portal === 'member'
-                  ? 'bg-emerald-600 text-white border-emerald-500'
-                  : theme === 'dark'
-                  ? 'bg-neutral-900 text-neutral-200 hover:bg-neutral-800 border-neutral-800'
-                  : 'bg-white text-slate-800 hover:bg-emerald-50 border-emerald-200'
-              }`}
-            >
-              <UserCheck className="w-3.5 h-3.5 text-emerald-500" />
-              <span>{portal === 'member' ? 'Exit Portal' : 'Member Portal'}</span>
-            </button>
-
             {/* Join Us CTA */}
             <button
               onClick={() => {
@@ -245,7 +224,7 @@ export const Header: React.FC<HeaderProps> = ({
               Join Us
             </button>
 
-            {/* Hamburger Menu Button - Prominent, Clean & Always Available */}
+            {/* Hamburger Menu Button */}
             <button
               onClick={() => setMenuOpen(!menuOpen)}
               className={`p-2 rounded-xl border flex items-center gap-1.5 transition-all ${
@@ -297,14 +276,15 @@ export const Header: React.FC<HeaderProps> = ({
                     STYMM Campaign Directory
                   </div>
                   <div className="text-[10px] text-emerald-500 font-semibold uppercase tracking-wider">
-                    Full Platform Access
+                    Official Youth Movement
                   </div>
                 </div>
               </div>
 
               <div className="flex items-center gap-2">
                 <button
-                  onClick={toggleTheme}
+                  type="button"
+                  onClick={handleThemeToggleClick}
                   className={`p-1.5 rounded-lg border text-xs flex items-center gap-1 ${
                     theme === 'dark' ? 'border-neutral-800 text-amber-300' : 'border-emerald-200 text-emerald-800'
                   }`}
@@ -323,63 +303,11 @@ export const Header: React.FC<HeaderProps> = ({
               </div>
             </div>
 
-            {/* Quick Action Top Cards */}
+            {/* Main Navigation Links */}
             <div className="p-4 sm:p-5 space-y-4">
-              <div className="grid grid-cols-2 gap-2">
-                <button
-                  onClick={() => handlePortalClick('member')}
-                  className={`p-3 rounded-xl border text-left transition-all ${
-                    portal === 'member'
-                      ? 'bg-emerald-600 text-white border-emerald-500 shadow-sm'
-                      : theme === 'dark'
-                      ? 'bg-neutral-900 border-neutral-800 hover:border-emerald-500/50 text-white'
-                      : 'bg-emerald-50/70 border-emerald-200 hover:border-emerald-400 text-slate-800'
-                  }`}
-                >
-                  <UserCheck className="w-4 h-4 text-emerald-500 mb-1" />
-                  <div className="text-xs font-bold">Member Portal</div>
-                  <div className="text-[10px] text-neutral-400">Canvassing & PVCs</div>
-                </button>
-
-                <button
-                  onClick={() => handlePortalClick('admin')}
-                  className={`p-3 rounded-xl border text-left transition-all ${
-                    portal === 'admin'
-                      ? 'bg-emerald-600 text-white border-emerald-500 shadow-sm'
-                      : theme === 'dark'
-                      ? 'bg-neutral-900 border-neutral-800 hover:border-emerald-500/50 text-white'
-                      : 'bg-emerald-50/70 border-emerald-200 hover:border-emerald-400 text-slate-800'
-                  }`}
-                >
-                  <ShieldCheck className="w-4 h-4 text-emerald-500 mb-1" />
-                  <div className="text-xs font-bold">Admin Command</div>
-                  <div className="text-[10px] text-neutral-400">Campaign Operations</div>
-                </button>
-              </div>
-
-              {/* Developer Media Manager 1-Click Trigger */}
-              <button
-                onClick={() => {
-                  setIsMediaManagerOpen(true);
-                  setMenuOpen(false);
-                }}
-                className={`w-full p-2.5 rounded-xl border flex items-center justify-between text-xs font-semibold transition-all ${
-                  theme === 'dark' 
-                    ? 'bg-neutral-900/60 border-neutral-800 hover:border-emerald-500/40 text-neutral-300' 
-                    : 'bg-slate-50 border-slate-200 hover:border-emerald-300 text-slate-700'
-                }`}
-              >
-                <div className="flex items-center gap-2">
-                  <ImageIcon className="w-4 h-4 text-emerald-500" />
-                  <span>Developer Media Manager (Upload & Sync)</span>
-                </div>
-                <ArrowRight className="w-3.5 h-3.5 opacity-60" />
-              </button>
-
-              {/* Categorized Campaign Links */}
-              <div className="space-y-1 pt-2">
+              <div className="space-y-1">
                 <div className="text-[11px] font-bold uppercase tracking-wider text-emerald-500 px-2 py-1">
-                  Main Navigation
+                  Campaign Navigation
                 </div>
                 {allNavLinks.map((link) => {
                   const isActive = portal === 'public' && publicNav === link.id;
@@ -433,6 +361,36 @@ export const Header: React.FC<HeaderProps> = ({
                   </span>
                   <span className="text-[10px] px-1.5 py-0.5 rounded-full bg-emerald-500/10 text-emerald-500 font-bold">
                     PWA Ready
+                  </span>
+                </button>
+              </div>
+
+              {/* Confidential Field Operatives Gate */}
+              <div className="pt-2 border-t border-neutral-200 dark:border-neutral-800 space-y-2">
+                <div className="text-[11px] font-bold uppercase tracking-wider text-neutral-400 px-2 py-1 flex items-center gap-1.5">
+                  <Lock className="w-3 h-3 text-emerald-500" />
+                  <span>Confidential Apparatus</span>
+                </div>
+
+                <button
+                  onClick={() => handlePortalClick('member')}
+                  className={`w-full text-left p-2.5 rounded-xl text-xs font-semibold flex items-center justify-between transition-colors ${
+                    portal === 'member'
+                      ? 'bg-emerald-600 text-white font-bold'
+                      : theme === 'dark'
+                      ? 'bg-neutral-900/60 hover:bg-neutral-900 text-neutral-300 border border-neutral-800'
+                      : 'bg-slate-50 hover:bg-emerald-50 text-slate-700 border border-slate-200'
+                  }`}
+                >
+                  <div className="flex items-center gap-2">
+                    <Lock className="w-3.5 h-3.5 text-emerald-500" />
+                    <div>
+                      <div>Accredited Vanguard Portal</div>
+                      <div className="text-[10px] text-neutral-400 font-normal">Restricted to verified canvassers</div>
+                    </div>
+                  </div>
+                  <span className="text-[10px] px-2 py-0.5 rounded-md font-bold uppercase tracking-wider bg-rose-500/10 text-rose-500 border border-rose-500/20">
+                    Restricted 🔒
                   </span>
                 </button>
               </div>

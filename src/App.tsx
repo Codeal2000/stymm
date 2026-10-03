@@ -11,8 +11,6 @@ import { useCampaignMedia } from './context/CampaignMediaContext';
 import { Header } from './components/common/Header';
 import { Footer } from './components/common/Footer';
 import { CartModal } from './components/common/CartModal';
-import { MediaManagerModal } from './components/common/MediaManagerModal';
-import { CheckCircle2, X } from 'lucide-react';
 
 // Public views
 import { PublicHome } from './components/public/PublicHome';
@@ -35,7 +33,7 @@ import { MobileAndSpecializedPreview } from './components/mobile_preview/MobileA
 
 export default function App() {
   const { theme } = useTheme();
-  const { images, lastUpdatedNotice, dismissNotice } = useCampaignMedia();
+  const { images } = useCampaignMedia();
   const [portal, setPortal] = useState<PortalSection>('public');
   const [publicNav, setPublicNav] = useState<PublicNav>('home');
   const [memberNav, setMemberNav] = useState<MemberNav>('dashboard');
@@ -215,6 +213,11 @@ export default function App() {
             canvassRecords={canvassRecords}
             onAddCanvassRecord={handleAddCanvassRecord}
             onAddToCart={handleAddToCart}
+            onBackToPublic={() => handleSelectPortal('public')}
+            onApplyForMembership={() => {
+              handleSelectPortal('public');
+              handleSelectPublicNav('join');
+            }}
           />
         )}
 
@@ -242,26 +245,6 @@ export default function App() {
         onUpdateQuantity={handleUpdateQuantity}
         onClearCart={handleClearCart}
       />
-
-      {/* Campaign Media & Photo Replacer Modal */}
-      <MediaManagerModal />
-
-      {/* Floating Notification Toast for Image Updates */}
-      {lastUpdatedNotice && (
-        <div className="fixed bottom-6 right-6 z-50 max-w-md animate-fade-in shadow-2xl rounded-2xl p-4 border bg-neutral-900/95 border-emerald-500/40 text-white backdrop-blur-md flex items-start gap-3">
-          <CheckCircle2 className="w-5 h-5 text-emerald-400 shrink-0 mt-0.5" />
-          <div className="flex-1 text-xs leading-relaxed text-neutral-200">
-            {lastUpdatedNotice}
-          </div>
-          <button
-            onClick={dismissNotice}
-            aria-label="Dismiss notification"
-            className="p-1 rounded-lg hover:bg-neutral-800 text-neutral-400 hover:text-white transition-colors"
-          >
-            <X className="w-4 h-4" />
-          </button>
-        </div>
-      )}
     </div>
   );
 }

@@ -33,7 +33,9 @@ import {
   Download,
   CheckCircle,
   Check,
+  Lock,
 } from 'lucide-react';
+import { VanguardAuthGate } from './VanguardAuthGate';
 
 interface MemberPortalViewProps {
   memberNav: MemberNav;
@@ -41,6 +43,8 @@ interface MemberPortalViewProps {
   canvassRecords: CanvassRecord[];
   onAddCanvassRecord: (record: CanvassRecord) => void;
   onAddToCart: (item: StoreItem, size?: string) => void;
+  onBackToPublic?: () => void;
+  onApplyForMembership?: () => void;
 }
 
 export const MemberPortalView: React.FC<MemberPortalViewProps> = ({
@@ -49,14 +53,43 @@ export const MemberPortalView: React.FC<MemberPortalViewProps> = ({
   canvassRecords,
   onAddCanvassRecord,
   onAddToCart,
+  onBackToPublic,
+  onApplyForMembership,
 }) => {
   const { theme } = useTheme();
+  const [isAuthenticated, setIsAuthenticated] = useState<boolean>(() => {
+    if (typeof window !== 'undefined') {
+      return sessionStorage.getItem('stymm_vanguard_auth') === 'true';
+    }
+    return false;
+  });
   const [toastMessage, setToastMessage] = useState<string | null>(null);
 
   const showToast = (msg: string) => {
     setToastMessage(msg);
     setTimeout(() => setToastMessage(null), 2500);
   };
+
+  const handleAuthenticated = (credentials: { id: string; name: string }) => {
+    sessionStorage.setItem('stymm_vanguard_auth', 'true');
+    setIsAuthenticated(true);
+    showToast(`Access granted. Welcome, ${credentials.name}`);
+  };
+
+  const handleLockPortal = () => {
+    sessionStorage.removeItem('stymm_vanguard_auth');
+    setIsAuthenticated(false);
+  };
+
+  if (!isAuthenticated) {
+    return (
+      <VanguardAuthGate
+        onSuccess={handleAuthenticated}
+        onBackToPublic={() => onBackToPublic ? onBackToPublic() : window.location.reload()}
+        onApplyForMembership={() => onApplyForMembership ? onApplyForMembership() : null}
+      />
+    );
+  }
 
   const sidebarLinks: { id: MemberNav; label: string; icon: any }[] = [
     { id: 'dashboard', label: 'Dashboard', icon: LayoutDashboard },
@@ -100,9 +133,19 @@ export const MemberPortalView: React.FC<MemberPortalViewProps> = ({
               Kehinde Balogun · Agent #4429
             </div>
           </div>
-          <span className="px-2.5 py-0.5 rounded-full text-[10px] font-bold bg-emerald-500/20 text-emerald-500 border border-emerald-500/30">
-            Field Active
-          </span>
+          <div className="flex items-center gap-2">
+            <span className="px-2.5 py-0.5 rounded-full text-[10px] font-bold bg-emerald-500/20 text-emerald-500 border border-emerald-500/30">
+              Field Active
+            </span>
+            <button
+              onClick={handleLockPortal}
+              className="flex items-center gap-1 px-2.5 py-1 text-[11px] font-bold rounded-xl text-rose-500 hover:bg-rose-500/10 border border-rose-500/20 transition-colors"
+              title="Lock Vanguard Session"
+            >
+              <Lock className="w-3 h-3" />
+              <span>Lock</span>
+            </button>
+          </div>
         </div>
 
         <div className="overflow-x-auto no-scrollbar pb-1">
@@ -143,8 +186,18 @@ export const MemberPortalView: React.FC<MemberPortalViewProps> = ({
             <div className={`text-sm font-bold truncate ${theme === 'dark' ? 'text-white' : 'text-neutral-900'}`}>
               Kehinde Balogun
             </div>
-            <div className={`text-[11px] font-mono ${theme === 'dark' ? 'text-slate-400' : 'text-slate-500'}`}>
-              Agent ID #4429
+            <div className="flex items-center justify-between mt-1">
+              <div className={`text-[11px] font-mono ${theme === 'dark' ? 'text-slate-400' : 'text-slate-500'}`}>
+                Agent ID #4429
+              </div>
+              <button
+                onClick={handleLockPortal}
+                className="flex items-center gap-1 px-2 py-0.5 text-[10px] font-bold rounded-lg text-rose-500 hover:bg-rose-500/10 border border-rose-500/20 transition-colors"
+                title="Lock Vanguard Session"
+              >
+                <Lock className="w-3 h-3" />
+                <span>Lock</span>
+              </button>
             </div>
           </div>
 
