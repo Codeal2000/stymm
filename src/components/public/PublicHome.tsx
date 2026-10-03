@@ -1,5 +1,5 @@
 import React from 'react';
-import { CANDIDATE_INFO, CAMPAIGN_EVENTS, CAMPAIGN_NEWS } from '../../data/campaignData';
+import { CANDIDATE_INFO, CAMPAIGN_EVENTS, CAMPAIGN_NEWS, CAMPAIGN_IMAGES } from '../../data/campaignData';
 import { PublicNav, PortalSection } from '../../types';
 import { useTheme } from '../../context/ThemeContext';
 import { useCampaignMedia } from '../../context/CampaignMediaContext';
@@ -286,7 +286,7 @@ export const PublicHome: React.FC<PublicHomeProps> = ({ onSelectNav, onSelectPor
                 theme === 'dark' ? 'border-neutral-700 bg-neutral-950' : 'border-emerald-300 bg-white'
               }`}>
                 <img
-                  src={images.interview || '/images/interview.jpg'}
+                  src={CAMPAIGN_IMAGES.interview}
                   alt="Seyi Tinubu speaking with Nigerian youth leaders at townhall event"
                   referrerPolicy="no-referrer"
                   className="w-full h-full object-cover transition-transform duration-700 hover:scale-105"

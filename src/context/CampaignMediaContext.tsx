@@ -24,10 +24,10 @@ export const IMAGE_SLOTS_CONFIG: Record<ImageSlot, ImageSlotMeta> = {
   },
   interview: {
     key: 'interview',
-    label: 'Candid Interview ("Why So Serious?")',
-    description: 'Seyi Tinubu in conversational dialogue speaking with youth leaders, sharing the grassroots youth vision.',
+    label: 'Candid Dialogue & Townhall Speech',
+    description: 'Seyi Tinubu speaking directly with Nigerian youth leaders at townhall event.',
     recommendedAspect: '16:9 or 4:3 Landscape',
-    defaultSrc: campaignMediaConfig.interview || (CAMPAIGN_IMAGES as any).interview || campaignMediaConfig.candidate || CAMPAIGN_IMAGES.candidate,
+    defaultSrc: campaignMediaConfig.interview || CAMPAIGN_IMAGES.interview,
     recommendedFileName: 'interview.jpg',
   },
   heroRally: {
@@ -117,7 +117,7 @@ export const CampaignMediaProvider: React.FC<{ children: React.ReactNode }> = ({
   // Compute effective images: LocalStorage -> Git Config -> Factory bundled defaults
   const images: Record<ImageSlot, string> = {
     candidate: customImages.candidate || campaignMediaConfig.candidate || CAMPAIGN_IMAGES.candidate,
-    interview: customImages.interview || customImages.candidate || campaignMediaConfig.interview || campaignMediaConfig.candidate || CAMPAIGN_IMAGES.candidate,
+    interview: customImages.interview || campaignMediaConfig.interview || CAMPAIGN_IMAGES.interview,
     heroRally: customImages.heroRally || campaignMediaConfig.heroRally || CAMPAIGN_IMAGES.heroRally,
     grassroots: customImages.grassroots || campaignMediaConfig.grassroots || CAMPAIGN_IMAGES.grassroots,
     merchandise: customImages.merchandise || campaignMediaConfig.merchandise || CAMPAIGN_IMAGES.merchandise,
