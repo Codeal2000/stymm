@@ -25,9 +25,9 @@ export const IMAGE_SLOTS_CONFIG: Record<ImageSlot, ImageSlotMeta> = {
   interview: {
     key: 'interview',
     label: 'Candid Interview ("Why So Serious?")',
-    description: 'Seyi Tinubu in conversational dialogue wearing his "Why So Serious?" cap, sharing the grassroots youth vision.',
+    description: 'Seyi Tinubu in conversational dialogue speaking with youth leaders, sharing the grassroots youth vision.',
     recommendedAspect: '16:9 or 4:3 Landscape',
-    defaultSrc: campaignMediaConfig.interview || campaignMediaConfig.candidate || CAMPAIGN_IMAGES.candidate,
+    defaultSrc: campaignMediaConfig.interview || (CAMPAIGN_IMAGES as any).interview || campaignMediaConfig.candidate || CAMPAIGN_IMAGES.candidate,
     recommendedFileName: 'interview.jpg',
   },
   heroRally: {
@@ -151,7 +151,7 @@ export const CampaignMediaProvider: React.FC<{ children: React.ReactNode }> = ({
           }));
           const slotMeta = IMAGE_SLOTS_CONFIG[slot];
           setLastUpdatedNotice(
-            `✨ Success! ${slotMeta.label} updated with your authentic photograph. AI conversion is disabled — original visual fidelity preserved.`
+            `✨ Success! ${slotMeta.label} updated with your authentic photograph. AI conversion is disabled; original visual fidelity preserved.`
           );
           resolve(result);
         } else {

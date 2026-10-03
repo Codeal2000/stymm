@@ -9,9 +9,15 @@ import {
   Sun, 
   Moon, 
   ShoppingBag,
-  ShieldCheck,
+  ShieldCheck, 
   UserCheck,
-  Image as ImageIcon
+  Image as ImageIcon,
+  Compass,
+  ArrowRight,
+  PhoneCall,
+  Flame,
+  Layers,
+  Heart
 } from 'lucide-react';
 
 interface HeaderProps {
@@ -33,332 +39,423 @@ export const Header: React.FC<HeaderProps> = ({
 }) => {
   const { theme, toggleTheme } = useTheme();
   const { setIsMediaManagerOpen } = useCampaignMedia();
-  const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
+  const [menuOpen, setMenuOpen] = useState(false);
 
-  const navLinks: { id: PublicNav; label: string }[] = [
+  // Core essential links for top bar
+  const primaryNavLinks: { id: PublicNav; label: string }[] = [
     { id: 'home', label: 'Home' },
     { id: 'about', label: 'About Us' },
     { id: 'movement', label: 'The Movement' },
-    { id: 'achievements', label: 'Achievements' },
     { id: 'events', label: 'Events' },
-    { id: 'news', label: 'News & Media' },
+    { id: 'news', label: 'News' },
   ];
 
+  // All navigation links for full hamburger menu
+  const allNavLinks: { id: PublicNav; label: string; desc?: string }[] = [
+    { id: 'home', label: 'Home', desc: 'Campaign overview, youth mandate & live updates' },
+    { id: 'about', label: 'About Seyi Tinubu & STYMM', desc: 'Vision, profile and youth leadership' },
+    { id: 'movement', label: 'The Movement', desc: 'Decentralized grassroots structure across 36 states' },
+    { id: 'achievements', label: 'Achievements & Impact', desc: 'Civic projects, youth empowerment & track record' },
+    { id: 'events', label: 'Upcoming Rallies & Events', desc: 'Townhalls, campus tours & mobilization dates' },
+    { id: 'news', label: 'News & Press Releases', desc: 'Official statements, disclaimers & media center' },
+    { id: 'resources', label: 'Manifesto & Field Manuals', desc: 'Canvasser guides, downloads & policy agenda' },
+    { id: 'donate', label: 'Grassroots Campaign Fund', desc: 'Voluntary civic donations & ward funding' },
+    { id: 'store', label: 'Official Campaign Store', desc: 'Caps, t-shirts, badges & mobilization merch' },
+    { id: 'contact', label: 'Secretariat & Contact', desc: 'Zonal offices, hotlines & field coordinator directory' },
+  ];
+
+  const handleNavClick = (id: PublicNav) => {
+    onSelectPortal('public');
+    onSelectPublicNav(id);
+    setMenuOpen(false);
+  };
+
+  const handlePortalClick = (targetPortal: PortalSection) => {
+    onSelectPortal(targetPortal);
+    setMenuOpen(false);
+  };
+
   return (
-    <header className={`sticky top-0 z-50 backdrop-blur-md transition-colors duration-200 ${
-      theme === 'dark'
-        ? 'bg-black/95 border-b border-neutral-800 text-white'
-        : 'bg-white/95 border-b border-emerald-100 text-slate-800 shadow-sm'
-    }`}>
-      {/* Patriotic Green & White Civic Top Band */}
-      <div className="bg-gradient-to-r from-emerald-800 via-emerald-700 to-emerald-800 text-white px-4 py-1.5 text-xs font-medium">
-        <div className="max-w-7xl mx-auto flex items-center justify-between">
-          <div className="flex items-center gap-2">
-            <span className="inline-flex items-center gap-1.5 px-2 py-0.5 rounded-full bg-white/20 text-white font-semibold text-[11px] tracking-wide">
-              🇳🇬 OFFICIAL YOUTH CAMPAIGN TRAIN
-            </span>
-            <span className="hidden md:inline text-emerald-100 font-medium">
-              Empowering Nigerian Youth Across All 36 States, 774 LGAs & 176,846 Polling Units
-            </span>
-          </div>
-
-          <div className="flex items-center gap-4 text-emerald-100 text-[11px]">
-            <span className="hidden sm:inline font-mono">Toll-Free Hotline: 0800-STYMM-2026</span>
-            <span className="hidden sm:inline">·</span>
-            <button
-              onClick={() => {
-                onSelectPortal('public');
-                onSelectPublicNav('donate');
-              }}
-              className="text-white hover:text-emerald-200 underline font-semibold transition-colors"
-            >
-              Grassroots Fund
-            </button>
-          </div>
-        </div>
-      </div>
-
-      {/* Main Top Bar */}
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-18 flex items-center justify-between">
-        {/* Brand / Logo */}
-        <button
-          onClick={() => {
-            onSelectPortal('public');
-            onSelectPublicNav('home');
-          }}
-          className="flex items-center gap-3 group text-left"
-        >
-          {/* Authentic Nigerian Green & White Campaign Emblem */}
-          <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-emerald-600 to-emerald-800 text-white flex items-center justify-center font-black text-lg shadow-md group-hover:scale-105 transition-transform border-2 border-emerald-400/40">
-            ST
-          </div>
-          <div>
-            <div className={`text-xl sm:text-2xl font-black tracking-tight font-display leading-none transition-colors ${
-              theme === 'dark' ? 'text-white group-hover:text-emerald-400' : 'text-emerald-950 group-hover:text-emerald-700'
-            }`}>
-              STYMM
+    <>
+      <header className={`sticky top-0 z-40 backdrop-blur-md transition-colors duration-200 ${
+        theme === 'dark'
+          ? 'bg-black/95 border-b border-neutral-800 text-white'
+          : 'bg-white/95 border-b border-emerald-100 text-slate-800 shadow-xs'
+      }`}>
+        {/* Patriotic Green & White Civic Top Band */}
+        <div className="bg-gradient-to-r from-emerald-800 via-emerald-700 to-emerald-800 text-white px-4 py-1 text-xs font-medium">
+          <div className="max-w-7xl mx-auto flex items-center justify-between">
+            <div className="flex items-center gap-2">
+              <span className="inline-flex items-center gap-1.5 px-2 py-0.5 rounded-full bg-white/20 text-white font-semibold text-[10px] tracking-wide">
+                🇳🇬 OFFICIAL YOUTH CAMPAIGN TRAIN
+              </span>
+              <span className="hidden lg:inline text-emerald-100 font-medium text-[11px]">
+                Empowering Nigerian Youth Across 36 States, 774 LGAs & 176,846 Polling Units
+              </span>
             </div>
-            <div className="text-[10px] font-bold tracking-widest text-emerald-600 uppercase">
-              Youth Mobilization Movement
-            </div>
-          </div>
-        </button>
 
-        {/* Main Desktop Navigation */}
-        <nav className="hidden lg:flex items-center gap-6 text-sm font-semibold">
-          {navLinks.map((link) => {
-            const isActive = portal === 'public' && publicNav === link.id;
-            return (
-              <button
-                key={link.id}
-                onClick={() => {
-                  onSelectPortal('public');
-                  onSelectPublicNav(link.id);
-                }}
-                className={`transition-all py-1 border-b-2 whitespace-nowrap ${
-                  isActive
-                    ? 'border-emerald-600 text-emerald-600 font-bold'
-                    : theme === 'dark'
-                    ? 'border-transparent text-neutral-300 hover:text-white hover:border-neutral-700'
-                    : 'border-transparent text-slate-700 hover:text-emerald-700 hover:border-emerald-300'
-                }`}
-              >
-                {link.label}
-              </button>
-            );
-          })}
-
-          {/* More Dropdown */}
-          <div className="relative group">
-            <button
-              className={`flex items-center gap-1.5 py-1 transition-colors whitespace-nowrap ${
-                theme === 'dark' ? 'text-neutral-300 hover:text-white' : 'text-slate-700 hover:text-emerald-700'
-              }`}
-            >
-              <span>Explore</span>
-              <ChevronDown className="w-3.5 h-3.5" />
-            </button>
-            <div className={`absolute top-full left-0 mt-2 w-56 rounded-2xl shadow-2xl py-2 hidden group-hover:block border backdrop-blur-lg ${
-              theme === 'dark'
-                ? 'bg-neutral-900 border-neutral-800 text-neutral-200'
-                : 'bg-white border-emerald-100 text-slate-800'
-            }`}>
-              <button
-                onClick={() => {
-                  onSelectPortal('public');
-                  onSelectPublicNav('resources');
-                }}
-                className={`w-full text-left px-4 py-2.5 text-xs font-medium transition-colors ${
-                  theme === 'dark' ? 'hover:bg-neutral-800 hover:text-white' : 'hover:bg-emerald-50 hover:text-emerald-900'
-                }`}
-              >
-                Manifesto & Resources
-              </button>
+            <div className="flex items-center gap-3 text-emerald-100 text-[11px]">
+              <span className="hidden sm:inline font-mono">0800-STYMM-2026</span>
+              <span className="hidden sm:inline">·</span>
               <button
                 onClick={() => {
                   onSelectPortal('public');
                   onSelectPublicNav('donate');
                 }}
-                className={`w-full text-left px-4 py-2.5 text-xs font-medium transition-colors ${
-                  theme === 'dark' ? 'hover:bg-neutral-800 hover:text-white' : 'hover:bg-emerald-50 hover:text-emerald-900'
-                }`}
+                className="text-white hover:text-emerald-200 underline font-semibold transition-colors flex items-center gap-1"
               >
-                Grassroots Campaign Fund
-              </button>
-              <button
-                onClick={() => {
-                  onSelectPortal('public');
-                  onSelectPublicNav('store');
-                }}
-                className={`w-full text-left px-4 py-2.5 text-xs font-medium transition-colors flex items-center justify-between ${
-                  theme === 'dark' ? 'hover:bg-neutral-800 hover:text-white' : 'hover:bg-emerald-50 hover:text-emerald-900'
-                }`}
-              >
-                <span>Campaign Store</span>
-                {cartCount > 0 && (
-                  <span className="bg-emerald-600 text-white font-bold px-1.5 py-0.5 rounded-full text-[10px]">
-                    {cartCount}
-                  </span>
-                )}
-              </button>
-              <button
-                onClick={() => {
-                  onSelectPortal('public');
-                  onSelectPublicNav('contact');
-                }}
-                className={`w-full text-left px-4 py-2.5 text-xs font-medium transition-colors ${
-                  theme === 'dark' ? 'hover:bg-neutral-800 hover:text-white' : 'hover:bg-emerald-50 hover:text-emerald-900'
-                }`}
-              >
-                Secretariat & Contact
-              </button>
-              <div className={`my-1 border-t ${theme === 'dark' ? 'border-neutral-800' : 'border-slate-100'}`} />
-              <button
-                onClick={() => onSelectPortal('mobile_preview')}
-                className={`w-full text-left px-4 py-2.5 text-xs font-medium transition-colors ${
-                  theme === 'dark' ? 'hover:bg-neutral-800 hover:text-emerald-400' : 'hover:bg-emerald-50 hover:text-emerald-700'
-                }`}
-              >
-                Mobile App & Campus Hub
+                <Heart className="w-3 h-3 text-rose-300 inline fill-rose-300" />
+                <span>Grassroots Fund</span>
               </button>
             </div>
           </div>
-        </nav>
+        </div>
 
-        {/* Action Controls: Theme Toggle + Member Portal + Join Us CTA */}
-        <div className="flex items-center gap-3">
-          {/* Theme Toggle Button */}
-          <button
-            onClick={toggleTheme}
-            aria-label="Toggle dark and light mode"
-            className={`p-2 rounded-xl transition-all border ${
-              theme === 'dark'
-                ? 'bg-neutral-900 text-amber-300 border-neutral-800 hover:bg-neutral-800 hover:border-amber-400/50'
-                : 'bg-emerald-50 text-emerald-800 border-emerald-200 hover:bg-emerald-100 hover:border-emerald-300'
-            }`}
-            title={theme === 'dark' ? 'Switch to Green & White Light Theme' : 'Switch to Pitch Black Dark Theme'}
-          >
-            {theme === 'dark' ? (
-              <Sun className="w-4 h-4 animate-spin-slow" />
-            ) : (
-              <Moon className="w-4 h-4" />
-            )}
-          </button>
-
-          {/* Cart Icon trigger if items exist */}
-          {cartCount > 0 && (
-            <button
-              onClick={onOpenCart}
-              className={`relative px-3 py-2 text-xs font-semibold rounded-xl border flex items-center gap-1.5 transition-colors ${
-                theme === 'dark'
-                  ? 'bg-neutral-900 text-white border-neutral-800 hover:bg-neutral-800'
-                  : 'bg-white text-emerald-900 border-emerald-200 hover:bg-emerald-50'
-              }`}
-            >
-              <ShoppingBag className="w-3.5 h-3.5 text-emerald-600" />
-              <span>Cart ({cartCount})</span>
-            </button>
-          )}
-
-          {/* Member Portal Button */}
-          <button
-            onClick={() => {
-              if (portal === 'member') {
-                onSelectPortal('public');
-                onSelectPublicNav('home');
-              } else {
-                onSelectPortal('member');
-              }
-            }}
-            className={`hidden sm:inline-flex items-center gap-1.5 px-3.5 py-2 text-xs font-bold rounded-xl border transition-all whitespace-nowrap ${
-              portal === 'member'
-                ? 'bg-emerald-600 text-white border-emerald-500'
-                : theme === 'dark'
-                ? 'bg-neutral-900 text-neutral-200 hover:bg-neutral-800 border-neutral-800'
-                : 'bg-white text-slate-800 hover:bg-emerald-50 border-emerald-200'
-            }`}
-          >
-            <UserCheck className="w-3.5 h-3.5 text-emerald-600" />
-            <span>{portal === 'member' ? 'Exit Portal' : 'Member Portal'}</span>
-          </button>
-
-          {/* Join Us CTA */}
+        {/* Main Top Bar - Clean, Spacious & Uncongested */}
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-16 flex items-center justify-between gap-4">
+          {/* Brand / Logo */}
           <button
             onClick={() => {
               onSelectPortal('public');
-              onSelectPublicNav('join');
+              onSelectPublicNav('home');
             }}
-            className="px-4 py-2 text-xs font-bold text-white bg-emerald-600 hover:bg-emerald-700 active:bg-emerald-800 rounded-xl transition-all shadow-sm hover:shadow-emerald-600/30 whitespace-nowrap"
+            className="flex items-center gap-2.5 group text-left shrink-0"
           >
-            Join The Movement
+            <div className="w-9 h-9 rounded-xl bg-gradient-to-br from-emerald-600 to-emerald-800 text-white flex items-center justify-center font-black text-base shadow-sm group-hover:scale-105 transition-transform border border-emerald-400/30">
+              ST
+            </div>
+            <div>
+              <div className={`text-lg sm:text-xl font-black tracking-tight font-display leading-none transition-colors ${
+                theme === 'dark' ? 'text-white group-hover:text-emerald-400' : 'text-emerald-950 group-hover:text-emerald-700'
+              }`}>
+                STYMM
+              </div>
+              <div className="text-[9px] font-bold tracking-widest text-emerald-600 uppercase">
+                Youth Movement
+              </div>
+            </div>
           </button>
 
-          {/* Mobile hamburger */}
-          <button
-            onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
-            className={`lg:hidden p-2 rounded-xl border ${
-              theme === 'dark'
-                ? 'text-neutral-300 border-neutral-800 hover:bg-neutral-900'
-                : 'text-slate-700 border-emerald-200 hover:bg-emerald-50'
-            }`}
-            aria-label="Toggle menu"
-          >
-            {mobileMenuOpen ? <X className="w-5 h-5" /> : <Menu className="w-5 h-5" />}
-          </button>
-        </div>
-      </div>
+          {/* Primary Navigation - Visible on large screens (xl+) */}
+          <nav className="hidden xl:flex items-center gap-6 text-xs sm:text-sm font-semibold">
+            {primaryNavLinks.map((link) => {
+              const isActive = portal === 'public' && publicNav === link.id;
+              return (
+                <button
+                  key={link.id}
+                  onClick={() => {
+                    onSelectPortal('public');
+                    onSelectPublicNav(link.id);
+                  }}
+                  className={`transition-all py-1 border-b-2 whitespace-nowrap ${
+                    isActive
+                      ? 'border-emerald-600 text-emerald-600 font-bold'
+                      : theme === 'dark'
+                      ? 'border-transparent text-neutral-300 hover:text-white hover:border-neutral-700'
+                      : 'border-transparent text-slate-700 hover:text-emerald-700 hover:border-emerald-300'
+                  }`}
+                >
+                  {link.label}
+                </button>
+              );
+            })}
 
-      {/* Mobile Drawer Menu */}
-      {mobileMenuOpen && (
-        <div className={`lg:hidden border-b px-4 pt-3 pb-6 space-y-4 ${
-          theme === 'dark'
-            ? 'bg-black border-neutral-800 text-white'
-            : 'bg-white border-emerald-100 text-slate-900'
-        }`}>
-          <div className="text-[11px] uppercase tracking-wider text-emerald-600 font-bold px-2">Navigation</div>
-          <div className="grid grid-cols-2 gap-2">
-            {[...navLinks, { id: 'resources' as PublicNav, label: 'Resources' }, { id: 'donate' as PublicNav, label: 'Grassroots Fund' }, { id: 'store' as PublicNav, label: 'Campaign Store' }, { id: 'contact' as PublicNav, label: 'Contact' }].map((link) => (
+            <button
+              onClick={() => {
+                onSelectPortal('public');
+                onSelectPublicNav('resources');
+              }}
+              className={`transition-all py-1 border-b-2 whitespace-nowrap ${
+                portal === 'public' && publicNav === 'resources'
+                  ? 'border-emerald-600 text-emerald-600 font-bold'
+                  : theme === 'dark'
+                  ? 'border-transparent text-neutral-300 hover:text-white hover:border-neutral-700'
+                  : 'border-transparent text-slate-700 hover:text-emerald-700 hover:border-emerald-300'
+              }`}
+            >
+              Resources
+            </button>
+          </nav>
+
+          {/* Right Action Controls: Theme Toggle + Member Portal + Join CTA + Hamburger */}
+          <div className="flex items-center gap-2 sm:gap-2.5 shrink-0">
+            {/* Theme Toggle Button */}
+            <button
+              onClick={toggleTheme}
+              aria-label="Toggle dark and light mode"
+              className={`p-2 rounded-xl transition-all border shrink-0 ${
+                theme === 'dark'
+                  ? 'bg-neutral-900 text-amber-300 border-neutral-800 hover:bg-neutral-800'
+                  : 'bg-emerald-50 text-emerald-800 border-emerald-200 hover:bg-emerald-100'
+              }`}
+              title={theme === 'dark' ? 'Switch to Light Theme' : 'Switch to Dark Theme'}
+            >
+              {theme === 'dark' ? (
+                <Sun className="w-4 h-4" />
+              ) : (
+                <Moon className="w-4 h-4" />
+              )}
+            </button>
+
+            {/* Cart Icon trigger if items exist */}
+            {cartCount > 0 && (
               <button
-                key={link.id}
-                onClick={() => {
-                  onSelectPortal('public');
-                  onSelectPublicNav(link.id);
-                  setMobileMenuOpen(false);
-                }}
-                className={`text-left px-3 py-2 text-xs rounded-xl font-medium transition-colors ${
-                  portal === 'public' && publicNav === link.id
-                    ? 'bg-emerald-600 text-white font-bold'
-                    : theme === 'dark'
-                    ? 'text-neutral-300 hover:bg-neutral-900'
-                    : 'text-slate-700 hover:bg-emerald-50'
+                onClick={onOpenCart}
+                className={`relative px-2.5 py-1.5 text-xs font-semibold rounded-xl border flex items-center gap-1.5 transition-colors ${
+                  theme === 'dark'
+                    ? 'bg-neutral-900 text-white border-neutral-800 hover:bg-neutral-800'
+                    : 'bg-white text-emerald-900 border-emerald-200 hover:bg-emerald-50'
                 }`}
               >
-                {link.label}
+                <ShoppingBag className="w-3.5 h-3.5 text-emerald-600" />
+                <span className="font-bold">{cartCount}</span>
               </button>
-            ))}
-          </div>
+            )}
 
-          <div className={`pt-3 border-t space-y-2 ${theme === 'dark' ? 'border-neutral-800' : 'border-slate-100'}`}>
-            <div className="flex items-center justify-between px-2">
-              <span className="text-xs font-semibold text-neutral-400">Theme</span>
-              <button
-                onClick={toggleTheme}
-                className="flex items-center gap-1.5 px-3 py-1.5 text-xs font-semibold rounded-lg bg-emerald-50 text-emerald-800 border border-emerald-200"
-              >
-                {theme === 'dark' ? <Sun className="w-3.5 h-3.5" /> : <Moon className="w-3.5 h-3.5" />}
-                <span>{theme === 'dark' ? 'Light Mode' : 'Dark Mode'}</span>
-              </button>
+            {/* Member Portal Button */}
+            <button
+              onClick={() => {
+                if (portal === 'member') {
+                  onSelectPortal('public');
+                  onSelectPublicNav('home');
+                } else {
+                  onSelectPortal('member');
+                }
+              }}
+              className={`hidden md:inline-flex items-center gap-1.5 px-3 py-1.5 text-xs font-bold rounded-xl border transition-all whitespace-nowrap ${
+                portal === 'member'
+                  ? 'bg-emerald-600 text-white border-emerald-500'
+                  : theme === 'dark'
+                  ? 'bg-neutral-900 text-neutral-200 hover:bg-neutral-800 border-neutral-800'
+                  : 'bg-white text-slate-800 hover:bg-emerald-50 border-emerald-200'
+              }`}
+            >
+              <UserCheck className="w-3.5 h-3.5 text-emerald-500" />
+              <span>{portal === 'member' ? 'Exit Portal' : 'Member Portal'}</span>
+            </button>
+
+            {/* Join Us CTA */}
+            <button
+              onClick={() => {
+                onSelectPortal('public');
+                onSelectPublicNav('join');
+              }}
+              className="px-3.5 py-1.5 text-xs font-bold text-white bg-emerald-600 hover:bg-emerald-700 active:bg-emerald-800 rounded-xl transition-all shadow-xs whitespace-nowrap"
+            >
+              Join Us
+            </button>
+
+            {/* Hamburger Menu Button - Prominent, Clean & Always Available */}
+            <button
+              onClick={() => setMenuOpen(!menuOpen)}
+              className={`p-2 rounded-xl border flex items-center gap-1.5 transition-all ${
+                menuOpen
+                  ? 'bg-emerald-600 text-white border-emerald-500 shadow-sm'
+                  : theme === 'dark'
+                  ? 'bg-neutral-900 text-neutral-200 border-neutral-800 hover:bg-neutral-800 hover:border-neutral-700'
+                  : 'bg-emerald-50/80 text-emerald-950 border-emerald-200 hover:bg-emerald-100 hover:border-emerald-300'
+              }`}
+              aria-label="Toggle navigation menu"
+              title="Open full navigation directory"
+            >
+              {menuOpen ? (
+                <X className="w-4 h-4" />
+              ) : (
+                <Menu className="w-4 h-4" />
+              )}
+              <span className="hidden sm:inline text-xs font-bold">
+                {menuOpen ? 'Close' : 'Menu'}
+              </span>
+            </button>
+          </div>
+        </div>
+      </header>
+
+      {/* Hamburger Navigation Drawer Modal / Backdrop */}
+      {menuOpen && (
+        <div className="fixed inset-0 z-50 overflow-hidden animate-fadeIn">
+          {/* Backdrop Blur Overlay */}
+          <div 
+            onClick={() => setMenuOpen(false)}
+            className="fixed inset-0 bg-black/70 backdrop-blur-sm transition-opacity" 
+          />
+
+          {/* Slide-out Drawer Panel */}
+          <div className={`fixed inset-y-0 right-0 max-w-full w-full sm:w-[420px] shadow-2xl flex flex-col z-10 overflow-y-auto border-l transition-transform duration-300 ${
+            theme === 'dark' ? 'bg-neutral-950 border-neutral-800 text-white' : 'bg-white border-emerald-200 text-slate-900'
+          }`}>
+            {/* Drawer Header */}
+            <div className={`p-4 sm:p-5 border-b flex items-center justify-between sticky top-0 backdrop-blur-md z-10 ${
+              theme === 'dark' ? 'bg-neutral-950/90 border-neutral-800' : 'bg-white/90 border-emerald-100'
+            }`}>
+              <div className="flex items-center gap-2.5">
+                <div className="w-8 h-8 rounded-lg bg-emerald-600 text-white flex items-center justify-center font-black text-sm">
+                  ST
+                </div>
+                <div>
+                  <div className="font-extrabold text-sm font-display leading-tight">
+                    STYMM Campaign Directory
+                  </div>
+                  <div className="text-[10px] text-emerald-500 font-semibold uppercase tracking-wider">
+                    Full Platform Access
+                  </div>
+                </div>
+              </div>
+
+              <div className="flex items-center gap-2">
+                <button
+                  onClick={toggleTheme}
+                  className={`p-1.5 rounded-lg border text-xs flex items-center gap-1 ${
+                    theme === 'dark' ? 'border-neutral-800 text-amber-300' : 'border-emerald-200 text-emerald-800'
+                  }`}
+                  title="Toggle theme"
+                >
+                  {theme === 'dark' ? <Sun className="w-3.5 h-3.5" /> : <Moon className="w-3.5 h-3.5" />}
+                </button>
+                <button
+                  onClick={() => setMenuOpen(false)}
+                  className={`p-1.5 rounded-lg border text-xs ${
+                    theme === 'dark' ? 'border-neutral-800 hover:bg-neutral-900' : 'border-slate-200 hover:bg-slate-100'
+                  }`}
+                >
+                  <X className="w-4 h-4" />
+                </button>
+              </div>
             </div>
 
-            <div className="grid grid-cols-2 gap-2 pt-2">
+            {/* Quick Action Top Cards */}
+            <div className="p-4 sm:p-5 space-y-4">
+              <div className="grid grid-cols-2 gap-2">
+                <button
+                  onClick={() => handlePortalClick('member')}
+                  className={`p-3 rounded-xl border text-left transition-all ${
+                    portal === 'member'
+                      ? 'bg-emerald-600 text-white border-emerald-500 shadow-sm'
+                      : theme === 'dark'
+                      ? 'bg-neutral-900 border-neutral-800 hover:border-emerald-500/50 text-white'
+                      : 'bg-emerald-50/70 border-emerald-200 hover:border-emerald-400 text-slate-800'
+                  }`}
+                >
+                  <UserCheck className="w-4 h-4 text-emerald-500 mb-1" />
+                  <div className="text-xs font-bold">Member Portal</div>
+                  <div className="text-[10px] text-neutral-400">Canvassing & PVCs</div>
+                </button>
+
+                <button
+                  onClick={() => handlePortalClick('admin')}
+                  className={`p-3 rounded-xl border text-left transition-all ${
+                    portal === 'admin'
+                      ? 'bg-emerald-600 text-white border-emerald-500 shadow-sm'
+                      : theme === 'dark'
+                      ? 'bg-neutral-900 border-neutral-800 hover:border-emerald-500/50 text-white'
+                      : 'bg-emerald-50/70 border-emerald-200 hover:border-emerald-400 text-slate-800'
+                  }`}
+                >
+                  <ShieldCheck className="w-4 h-4 text-emerald-500 mb-1" />
+                  <div className="text-xs font-bold">Admin Command</div>
+                  <div className="text-[10px] text-neutral-400">Campaign Operations</div>
+                </button>
+              </div>
+
+              {/* Developer Media Manager 1-Click Trigger */}
               <button
                 onClick={() => {
-                  onSelectPortal('member');
-                  setMobileMenuOpen(false);
+                  setIsMediaManagerOpen(true);
+                  setMenuOpen(false);
                 }}
-                className="flex items-center justify-center gap-2 p-2.5 bg-emerald-600 text-white font-bold rounded-xl text-xs shadow-sm"
-              >
-                <UserCheck className="w-4 h-4" />
-                Member Portal
-              </button>
-              <button
-                onClick={() => {
-                  onSelectPortal('admin');
-                  setMobileMenuOpen(false);
-                }}
-                className={`flex items-center justify-center gap-2 p-2.5 rounded-xl text-xs font-bold border ${
-                  theme === 'dark'
-                    ? 'bg-neutral-900 text-white border-neutral-800'
-                    : 'bg-white text-slate-800 border-slate-200'
+                className={`w-full p-2.5 rounded-xl border flex items-center justify-between text-xs font-semibold transition-all ${
+                  theme === 'dark' 
+                    ? 'bg-neutral-900/60 border-neutral-800 hover:border-emerald-500/40 text-neutral-300' 
+                    : 'bg-slate-50 border-slate-200 hover:border-emerald-300 text-slate-700'
                 }`}
               >
-                <ShieldCheck className="w-4 h-4 text-emerald-600" />
-                Admin Command
+                <div className="flex items-center gap-2">
+                  <ImageIcon className="w-4 h-4 text-emerald-500" />
+                  <span>Developer Media Manager (Upload & Sync)</span>
+                </div>
+                <ArrowRight className="w-3.5 h-3.5 opacity-60" />
               </button>
+
+              {/* Categorized Campaign Links */}
+              <div className="space-y-1 pt-2">
+                <div className="text-[11px] font-bold uppercase tracking-wider text-emerald-500 px-2 py-1">
+                  Main Navigation
+                </div>
+                {allNavLinks.map((link) => {
+                  const isActive = portal === 'public' && publicNav === link.id;
+                  return (
+                    <button
+                      key={link.id}
+                      onClick={() => handleNavClick(link.id)}
+                      className={`w-full text-left p-2.5 rounded-xl transition-all flex items-center justify-between group ${
+                        isActive
+                          ? 'bg-emerald-600 text-white font-bold shadow-xs'
+                          : theme === 'dark'
+                          ? 'hover:bg-neutral-900 text-neutral-300 hover:text-white'
+                          : 'hover:bg-emerald-50 text-slate-700 hover:text-emerald-950'
+                      }`}
+                    >
+                      <div>
+                        <div className="text-xs font-bold group-hover:translate-x-0.5 transition-transform">
+                          {link.label}
+                        </div>
+                        {link.desc && (
+                          <div className={`text-[10px] line-clamp-1 ${
+                            isActive ? 'text-emerald-100' : 'text-neutral-400'
+                          }`}>
+                            {link.desc}
+                          </div>
+                        )}
+                      </div>
+                      <ChevronDown className={`w-3.5 h-3.5 -rotate-90 opacity-40 group-hover:opacity-100 group-hover:translate-x-1 transition-all ${
+                        isActive ? 'text-white' : ''
+                      }`} />
+                    </button>
+                  );
+                })}
+              </div>
+
+              {/* Special Campaign Hubs */}
+              <div className="pt-2 border-t border-neutral-200 dark:border-neutral-800 space-y-1">
+                <div className="text-[11px] font-bold uppercase tracking-wider text-neutral-400 px-2 py-1">
+                  Civic Engines
+                </div>
+
+                <button
+                  onClick={() => handlePortalClick('mobile_preview')}
+                  className={`w-full text-left p-2.5 rounded-xl text-xs font-medium flex items-center justify-between transition-colors ${
+                    theme === 'dark' ? 'hover:bg-neutral-900 text-neutral-300' : 'hover:bg-emerald-50 text-slate-700'
+                  }`}
+                >
+                  <span className="flex items-center gap-2">
+                    <Flame className="w-3.5 h-3.5 text-amber-500" />
+                    Mobile App & Campus Hub
+                  </span>
+                  <span className="text-[10px] px-1.5 py-0.5 rounded-full bg-emerald-500/10 text-emerald-500 font-bold">
+                    PWA Ready
+                  </span>
+                </button>
+              </div>
+
+              {/* Primary Call to Action in Drawer */}
+              <div className="pt-3 pb-6 border-t border-neutral-200 dark:border-neutral-800 space-y-3">
+                <button
+                  onClick={() => handleNavClick('join')}
+                  className="w-full py-3 px-4 rounded-xl bg-emerald-600 hover:bg-emerald-700 text-white font-bold text-xs sm:text-sm text-center shadow-lg transition-all flex items-center justify-center gap-2"
+                >
+                  <span>Join The Movement Today</span>
+                  <ArrowRight className="w-4 h-4" />
+                </button>
+
+                <div className="text-center text-[11px] text-neutral-400">
+                  <span>Toll-Free Nationwide Hotline: </span>
+                  <strong className="text-emerald-500 font-mono">0800-STYMM-2026</strong>
+                </div>
+              </div>
             </div>
           </div>
         </div>
       )}
-    </header>
+    </>
   );
 };

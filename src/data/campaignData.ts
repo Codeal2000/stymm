@@ -1,6 +1,7 @@
 import heroRallyImg from '../assets/images/hero_youth_rally.png';
 import candidateImg from '../assets/images/candidate_seyi_tinubu_portrait.jpg';
-import grassrootsImg from '../assets/images/grassroots_fieldwork_1790759495817.jpg';
+import interviewImg from '../assets/images/interview.jpg';
+import grassrootsImg from '../assets/images/children.jpg';
 import merchandiseImg from '../assets/images/campaign_merchandise_1790759506072.jpg';
 import civicBgImg from '../assets/images/civic_bg_pattern_1790760970317.jpg';
 import { EventItem, NewsItem, PollingUnit, StoreItem, TrainingLesson, CanvassRecord } from '../types';
@@ -8,6 +9,7 @@ import { EventItem, NewsItem, PollingUnit, StoreItem, TrainingLesson, CanvassRec
 export const CAMPAIGN_IMAGES = {
   heroRally: heroRallyImg,
   candidate: candidateImg,
+  interview: interviewImg,
   grassroots: grassrootsImg,
   merchandise: merchandiseImg,
   civicBg: civicBgImg,

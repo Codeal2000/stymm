@@ -231,7 +231,7 @@ export const PublicHome: React.FC<PublicHomeProps> = ({ onSelectNav, onSelectPor
               </h2>
 
               <p className={`text-sm sm:text-base leading-relaxed ${theme === 'dark' ? 'text-neutral-300' : 'text-slate-700'}`}>
-                In this candid interview session, Seyi Tinubu speaks on breaking free from cynical, backroom politics. Wearing his signature cap and speaking openly with Nigerian youth leaders, he unpacks why grassroots civic engagement shouldn&rsquo;t be intimidating — it is an active celebration of our generation&rsquo;s future.
+                In this candid interview session, Seyi Tinubu speaks on breaking free from cynical, backroom politics. Wearing his signature cap and speaking openly with Nigerian youth leaders, he unpacks why grassroots civic engagement shouldn&rsquo;t be intimidating; it is an active celebration of our generation&rsquo;s future.
               </p>
 
               {/* Three Insight Callouts */}
@@ -286,8 +286,8 @@ export const PublicHome: React.FC<PublicHomeProps> = ({ onSelectNav, onSelectPor
                 theme === 'dark' ? 'border-neutral-700 bg-neutral-950' : 'border-emerald-300 bg-white'
               }`}>
                 <img
-                  src={images.interview}
-                  alt="Seyi Tinubu candid conversation wearing Why So Serious cap"
+                  src={images.interview || '/images/interview.jpg'}
+                  alt="Seyi Tinubu speaking with Nigerian youth leaders at townhall event"
                   referrerPolicy="no-referrer"
                   className="w-full h-full object-cover transition-transform duration-700 hover:scale-105"
                 />
@@ -384,8 +384,8 @@ export const PublicHome: React.FC<PublicHomeProps> = ({ onSelectNav, onSelectPor
 
             <div className="lg:col-span-6 h-full min-h-[300px] overflow-hidden">
               <img
-                src={images.grassroots}
-                alt="Grassroots volunteers engaging with community members"
+                src={images.grassroots || '/images/children.jpg'}
+                alt="Nigerian children and youth solidarity rally waving national flags"
                 referrerPolicy="no-referrer"
                 className="w-full h-full object-cover object-center max-h-[420px] hover:scale-105 transition-transform duration-500"
               />
